@@ -1,0 +1,674 @@
+@media screen and (max-width: 1367px) {
+  nav {
+    padding: 0 $p_md;
+  }
+
+  #home {
+    height: 100vh;
+    > section {
+      &:first-of-type {
+        padding-left: $p_md;
+        > div {
+          .window {
+            display: none;
+          }
+        }
+      }
+
+      &:last-of-type {
+        .altWindow {
+          display: flex;
+        }
+
+        .imageWrapper {
+          height: 25vmax;
+          width: 25vmax;
+          top: 57%;
+          > img {
+            width: 25vmax;
+            height: 25vmax;
+          }
+        }
+      }
+    }
+  }
+  #work {
+    padding: 8rem $p_md;
+    > section {
+      > article {
+        .workItem {
+          width: 22rem;
+          height: 25rem;
+
+          .imageWrapper {
+            > img {
+              height: 9rem;
+            }
+          }
+
+          > aside {
+            > h3 {
+              font-size: 1.5rem;
+              margin-top: 1.2rem;
+            }
+            > p {
+              font-size: 0.9rem;
+            }
+
+            > a {
+              margin-bottom: 2rem;
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #services {
+    padding: $p_md;
+    > section {
+      height: 90%;
+    }
+  }
+
+  #testimonial {
+    padding: $p_md;
+    > section {
+      width: 100%;
+    }
+  }
+
+  #contact > section > form {
+    > input,
+    > button {
+      font: 400 0.8rem $text1;
+      width: 50%;
+    }
+  }
+
+  footer {
+    padding-left: $p_md;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  nav {
+    padding: 0 $p_base;
+  }
+
+  #home {
+    height: 110vh;
+    > section {
+      &:first-of-type {
+        padding-left: $p_base;
+        > div {
+          > h1 {
+            font: 900 3rem $text1;
+          }
+
+          aside {
+            width: 100%;
+          }
+        }
+      }
+      &:last-of-type {
+        .altH1 {
+          font: 900 3rem $text1;
+        }
+
+        .altWindow {
+          > div {
+            .navLinksWrapper {
+              gap: 7px;
+              font: 400 0.8rem $text2;
+            }
+          }
+          > article {
+            p {
+              font: 400 1.2rem $text2;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #work {
+    padding: 8rem $p_base;
+    > section {
+      > article {
+        .workItem {
+          height: 24rem;
+          width: 18rem;
+          .imageWrapper {
+            > img {
+              height: 7rem;
+            }
+          }
+          > Aside {
+            > h3 {
+              font-size: 1.2rem;
+            }
+            > p {
+              font-size: 0.8rem;
+            }
+            > a {
+              font-size: 0.8rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #services {
+    padding: $p_base_inverse;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  nav {
+    padding: 0 $p_sm;
+    > h2 {
+      font-size: 1.8rem;
+    }
+    > div {
+      gap: 1rem;
+    }
+  }
+
+  #home {
+    > section {
+      &:first-of-type {
+        padding-left: $p_sm;
+        > div {
+          > div {
+            gap: 2rem;
+            width: 100%;
+          }
+
+          aside {
+            flex-direction: column;
+          }
+        }
+      }
+
+      &:last-of-type {
+        .altWindow {
+          > div {
+            .navLinksWrapper {
+              gap: 7px;
+              font: 400 0.7rem $text2;
+            }
+          }
+          > article {
+            > h3 {
+              font: 700 1.6rem $text2;
+            }
+            p {
+              font: 400 1.1rem $text2;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #work {
+    height: 130vh;
+    padding: 8rem $p_zero;
+    > section {
+      > article {
+        .workItem {
+          height: 22rem;
+          width: 16rem;
+          .imageWrapper {
+            > img {
+              height: 6rem;
+            }
+          }
+          > aside {
+            > h3 {
+              font-size: 1.1rem;
+            }
+            > p {
+              font-size: 0.7rem;
+            }
+            > a {
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #services {
+    padding: $p_sm_inverse;
+    height: 100vh;
+    > section {
+      margin: 2rem 0;
+    }
+
+    /*  > section {
+      &:last-of-type {
+        > img {
+          height: 30vmax;
+          width: 39vmax;
+        }
+      }
+    } */
+  }
+
+  #testimonial {
+    padding: $p_zero;
+    > h2 {
+      padding: 3rem;
+      margin-bottom: 0;
+    }
+    > section {
+      padding: 3rem;
+      height: 45rem;
+      justify-content: space-evenly;
+
+      > article {
+        width: 40%;
+        height: 50%;
+      }
+    }
+  }
+
+  #contact > section > form {
+    > h2 {
+      font: 100 2.3rem $text2;
+    }
+    > input,
+    > button {
+      width: 65%;
+    }
+  }
+
+  footer {
+    padding-left: $p_zero;
+    grid-template-columns: 1fr;
+    > div {
+      width: 100%;
+      border: none;
+      p {
+        width: 50%;
+        margin: 2rem auto;
+      }
+    }
+    > a {
+      margin: 1rem;
+    }
+  }
+}
+
+@media screen and (max-width: 786px) {
+  nav {
+    > div,
+    > a {
+      display: none;
+    }
+  }
+
+  #home {
+    section {
+      &:last-of-type {
+        .altWindow {
+          > div {
+            .navLinksWrapper {
+              gap: 7px;
+              font: 400 0.68rem $text2;
+            }
+          }
+          > article {
+            p {
+              font: 400 1.1rem $text2;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #services {
+    padding: 2vmax 5vmax;
+    flex-direction: column;
+    width: 100%;
+    height: 160vh;
+    > section {
+      &:first-of-type {
+        width: 100%;
+        > article {
+          text-align: center;
+          > p {
+            font: 400 1rem $text2;
+          }
+        }
+        > aside {
+          width: 100%;
+          text-align: center;
+          > h3 {
+            width: 100%;
+            text-align: center;
+          }
+          .technologies {
+            width: 100%;
+          }
+          .tools {
+            width: 100%;
+            .imgWrapper2 {
+              width: 100%;
+            }
+          }
+        }
+      }
+      &:last-of-type {
+        width: 100%;
+        > img {
+          margin-top: -5rem;
+          height: 57vmax;
+          width: 90%;
+        }
+      }
+    }
+  }
+
+  #work {
+    height: 180vh;
+
+    > section {
+      width: 100%;
+      > article {
+        grid-template-columns: 1fr 1fr;
+        .workItem {
+          height: 22rem;
+          width: 18rem;
+          .imageWrapper {
+            > img {
+              height: 6.5rem;
+            }
+          }
+          > aside {
+            > h3 {
+              font-size: 1.3rem;
+            }
+            > p {
+              font-size: 0.75rem;
+            }
+            > a {
+              font-size: 0.75rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .navBtn {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #home {
+    height: unset;
+    flex-direction: column-reverse;
+    > section {
+      &:first-of-type {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        > div {
+          border: none;
+          padding-top: 3rem;
+          h1 {
+            display: none;
+          }
+
+          .typewriterpara {
+            margin: -10px 0;
+          }
+
+          > div {
+            flex-direction: column;
+          }
+
+          article {
+            width: 100%;
+            text-align: center;
+            &::after {
+              top: 0;
+              left: 0;
+            }
+          }
+        }
+      }
+
+      &:last-of-type {
+        border: none;
+        .altH1 {
+          display: unset;
+          font: 900 2.5rem $text1;
+          text-align: center;
+          padding: 1.5rem 0;
+        }
+
+        .altWindow {
+          > article {
+            > h3 {
+              font: 700 1.7rem $text2;
+            }
+            > p {
+              font: 400 1.2rem $text2;
+            }
+          }
+        }
+      }
+    }
+
+    > svg {
+      font-size: 2rem;
+      bottom: -12;
+    }
+  }
+
+  #work {
+    height: 380vh;
+
+    > section {
+      width: 100%;
+      > article {
+        grid-template-columns: 1fr;
+        .workItem {
+          height: 28rem;
+          width: 80%;
+          .imageWrapper {
+            > img {
+              height: 10rem;
+            }
+          }
+          > aside {
+            > h3 {
+              font-size: 1.8rem;
+            }
+            > p {
+              font-size: 1rem;
+            }
+            > a {
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #timeline {
+    .timelineBox::after {
+      left: 31px;
+    }
+
+    .timelineItem {
+      width: 100%;
+      padding-left: 5rem;
+      padding-right: 2rem;
+    }
+
+    .rightTimeline {
+      left: 0%;
+    }
+
+    .rightTimeline,
+    .leftTimeline {
+      &::after {
+        left: 15px;
+      }
+    }
+  }
+
+  #services {
+    height: 150vh;
+    > section {
+      &:last-of-type {
+        > img {
+          height: 45vmax;
+          width: 80%;
+        }
+      }
+    }
+  }
+
+  #testimonial > section {
+    height: unset;
+    gap: 3rem;
+
+    > article {
+      width: 100%;
+      height: 100vw;
+    }
+  }
+
+  #contact {
+    grid-template-columns: 1fr;
+    > aside {
+      display: none;
+    }
+  }
+
+  footer {
+    padding-left: $p_zero;
+    grid-template-columns: 1fr;
+    > div {
+      width: 100%;
+      border: none;
+      p {
+        width: 50%;
+        margin: 2rem auto;
+      }
+    }
+    > a {
+      margin: 1rem;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  #home {
+    > section {
+      &:last-of-type {
+        .altWindow {
+          .navWrapper {
+            .navLinksWrapper {
+              font-size: 0.65rem;
+            }
+          }
+          > article {
+            > h3 {
+              font-size: 1.5rem;
+            }
+            > p {
+              font-size: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  #services {
+    height: 160vh;
+    > section {
+      &:first-of-type {
+        > article {
+          > h4 {
+            font-size: 1.7rem;
+          }
+          > p {
+            font-size: 0.9rem;
+          }
+        }
+        > aside {
+          .technologies {
+            > div {
+              flex-wrap: wrap;
+            }
+          }
+        }
+      }
+      &:last-of-type {
+        > img {
+          height: 30vmax;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  #services {
+    height: 170vh;
+    > section {
+      &:last-of-type {
+        > img {
+          height: 42vmax;
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  #work {
+    height: 340vh;
+    > section {
+      > article {
+        grid-template-columns: 1fr;
+        .workItem {
+          height: 25rem;
+          width: 80%;
+          .imageWrapper {
+            > img {
+              height: 8rem;
+            }
+          }
+          > aside {
+            > h3 {
+              font-size: 1.5rem;
+            }
+            > p {
+              font-size: .85rem;
+            }
+            > a {
+              font-size: 0.85rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
