@@ -12,19 +12,22 @@ const Work = () => {
           <div className="workItem">
             <div className="imageWrapper">
               <img
-                src="https://cdn.pixabay.com/photo/2018/06/07/16/49/virtual-3460451_960_720.jpg"
+                src="https://media.istockphoto.com/id/1498577422/photo/hand-of-businessman-holding-phone-with-smart-robot-enters-command-to-create-something.jpg?s=2048x2048&w=is&k=20&c=9ygFs5hc2Zw3wd0ydqDAH2qcGCJ2uXnb-WOs0SickpA="
                 alt="TECHY STAR"
               />
             </div>
 
             <aside>
-              <h3>TECHY STAR</h3>
+              <h3>PROMPTOPIA</h3>
               <p>
-                This is my first react app. I learned many new things while
-                building this website like sass, react-dom, react-responsive,
-                vercel, react-router etc. React is amazing!
+                While building this project i learned a little bit of backend
+                where i used MongoDB for database and most importantly i used
+                NEXT.js to build this app which made developing really easy.
               </p>
-              <a target="blank" href="https://reactone-wine-ten.vercel.app/">
+              <a
+                target="blank"
+                href="https://promptopia-a7sb2hx2l-10kumaranurag01.vercel.app/"
+              >
                 View Demo
               </a>
             </aside>
@@ -32,19 +35,22 @@ const Work = () => {
           <div className="workItem">
             <div className="imageWrapper">
               <img
-                src="https://cdn.pixabay.com/photo/2016/11/21/12/51/mobile-phone-1845233__340.jpg"
+                src="https://cdn.pixabay.com/photo/2020/11/22/04/10/youtube-5765608_1280.png "
                 alt="VIDEO HUB"
               />
             </div>
 
             <aside>
-              <h3>VIDEO HUB</h3>
+              <h3>KASMedia</h3>
               <p>
-                This is a basic video streaming web app made using React.js.
-                Only the frontend is made with React. I used Chakra UI to design
-                UI elements in this app
+                I made a Youtube clone using reactJS, it has livestream feature
+                to interact with viewers and the host can join as separately. It
+                fetches actual youtube data from youtube API from rapidAPI.
               </p>
-              <a target="blank" href="https://reacttwo-mauve.vercel.app/">
+              <a
+                target="blank"
+                href="https://yt-clone-lgutq3wn4-10kumaranurag01.vercel.app/"
+              >
                 View Demo
               </a>
             </aside>

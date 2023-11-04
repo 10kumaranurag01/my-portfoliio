@@ -12,6 +12,7 @@ import git from "../assets/git.png";
 import vg2 from "../assets/vg2.png";
 import vg3 from "../assets/vg3.jpg";
 import tailwind from "../assets/tailwindcss.png";
+import nextjs from "../assets/next2.png"
 
 const Services = () => {
   return (
@@ -41,6 +42,7 @@ const Services = () => {
               <img src={chakraui} alt="chakraui" />
               <img src={react} alt="react" />
               <img src={redux} alt="redux" />
+              <img src={nextjs} alt="nextjs" />
             </div>
           </div>
           <div className="tools">
@@ -53,7 +55,7 @@ const Services = () => {
           </div>
         </aside>
         <a
-          href={require("../assets/Deedy_CV.pdf")}
+          href={require("../assets/Kumar_Anurag.pdf")}
           download
           style={{ textDecoration: "underline" }}
         >

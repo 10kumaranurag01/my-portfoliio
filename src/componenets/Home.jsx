@@ -69,7 +69,7 @@ const Home = () => {
               </div>
               <div>
                 <a
-                  href={require("../assets/Deedy_CV.pdf")}
+                  href={require("../assets/Kumar_Anurag.pdf")}
                   download
                   style={{ textDecoration: "underline" }}
                 >
@@ -111,7 +111,7 @@ const Home = () => {
             </div>
             <div className="navLinksWrapper">
               <a
-                href={require("../assets/Deedy_CV.pdf")}
+                href={require("../assets/Kumar_Anurag.pdf")}
                 download
                 style={{ textDecoration: "underline" }}
               >
@@ -123,7 +123,7 @@ const Home = () => {
           <article>
             <h3>What I Do</h3>
             <p className="altWindowArticleP">
-              Experienced 3rd year student proficient in React JS with a passion
+              Experienced 4th year student proficient in React JS with a passion
               for building dynamic and responsive web applications.
             </p>
           </article>
