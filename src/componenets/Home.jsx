@@ -81,8 +81,9 @@ const Home = () => {
             <article>
               <h3>What I Do</h3>
               <p>
-                Experienced 3rd year student proficient in React JS with a
-                passion for building dynamic and responsive web applications.
+              As a novice full-stack web developer, I'm poised to embark on a
+              journey of learning and growth, aspiring to contribute my
+              technical acumen to cutting-edge projects.
               </p>
             </article>
           </div>
@@ -123,8 +124,9 @@ const Home = () => {
           <article>
             <h3>What I Do</h3>
             <p className="altWindowArticleP">
-              Experienced 4th year student proficient in ReactJS and NextJS with a passion
-              for building dynamic and responsive web applications.
+              As a novice full-stack web developer, I'm poised to embark on a
+              journey of learning and growth, aspiring to contribute my
+              technical acumen to cutting-edge projects.
             </p>
           </article>
         </div>

@@ -11,9 +11,31 @@ const Work = () => {
         <article>
           <div className="workItem">
             <div className="imageWrapper">
+                <img
+                  src="https://i.ibb.co/r7Fjk4X/medeumpng.png"
+                  alt="medeumpng"
+                  border="0"
+                />
+            </div>
+
+            <aside>
+              <h3>Medeum</h3>
+              <p>
+                While building this project i learned a PostgreSQL, cloudflare
+                workers, database connection pooling, custom react hooks and Prisma
+                ORM, which gave me deep insights
+                about full stack development.
+              </p>
+              <a target="blank" href="https://medeum.anuragg.top">
+                View Demo
+              </a>
+            </aside>
+          </div>
+          <div className="workItem">
+            <div className="imageWrapper">
               <img
                 src="https://media.istockphoto.com/id/1498577422/photo/hand-of-businessman-holding-phone-with-smart-robot-enters-command-to-create-something.jpg?s=2048x2048&w=is&k=20&c=9ygFs5hc2Zw3wd0ydqDAH2qcGCJ2uXnb-WOs0SickpA="
-                alt="TECHY STAR"
+                alt="PROMPTOPIA"
               />
             </div>
 
