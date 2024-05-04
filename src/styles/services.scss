@@ -64,10 +64,14 @@
             align-items: center;
             margin: 0.5rem 0;
             background-color: $color5_1;
+
             padding: 8px;
             border-radius: 8px;
             > img {
               transition: all 0.3s;
+              padding: 0.27rem;
+              height: 48px;
+              width: 48px;
 
               &:hover {
                 transform: scale(1.2);
@@ -85,7 +89,6 @@
             display: flex;
             justify-content: space-evenly;
             flex-wrap: wrap;
-            width: 15rem;
             align-items: center;
             margin: 0.5rem 0;
             background-color: $color5_1;
@@ -94,6 +97,9 @@
 
             > img {
               transition: all 0.3s;
+              padding: 0.45rem;
+              height: 48px;
+              width: 48px;
 
               &:hover {
                 transform: scale(1.2);

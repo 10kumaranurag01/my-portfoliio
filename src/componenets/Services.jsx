@@ -6,7 +6,7 @@ import react from "../assets/react.png";
 import redux from "../assets/redux.png";
 import sass from "../assets/sass.png";
 import chakraui from "../assets/chakraui.png";
-import mongodb from "../assets/MongoDB_Logomark_ForestGreen.png";
+import mongodb from "../assets/icons8-mongodb-a-cross-platform-document-oriented-database-program-48.png";
 import vscode from "../assets/vscode.png";
 import npm from "../assets/npm.png";
 import git from "../assets/git.png";
@@ -19,12 +19,12 @@ import express from "../assets/icons8-express-js-40.png";
 import cloudflare from "../assets/icons8-cloudflare-provides-content-delivery-network-services,-ddos-mitigation.-48.png";
 import prisma from "../assets/icons8-prisma-orm-48.png";
 import turborepo from "../assets/turborepo-icon_.png";
-import ts from "../assets/icons8-typescript-48.png";
+import ts from "../assets/icons8-typescript-48 (1).png";
 import docker from "../assets/icons8-docker-48.png";
 import postman from "../assets/icons8-postman-is-the-only-complete-api-development-environment-48.png";
-import hopscotch from "../assets/56705483.png"
-import node from "../assets/icons8-nodejs-48.png"
-import github from "../assets/github-mark-white.png"
+import hopscotch from "../assets/56705483.png";
+import node from "../assets/nodejs.png";
+import github from "../assets/github-mark-white.png";
 
 const Services = () => {
   return (
@@ -63,26 +63,25 @@ const Services = () => {
               <img src={react} alt="react" />
               <img src={redux} alt="redux" />
               <img src={nextjs} alt="nextjs" />
-              <img height={40} width={22} src={mongodb} alt="mongodb" />
-              <img height={48} width={48} src={postgreSQL} alt="postgreSQL" />
-              <img height={48} width={48} src={express} alt="express" />
+              <img src={mongodb} alt="mongodb" />
+              <img src={postgreSQL} alt="postgreSQL" />
+              <img src={express} alt="express" />
               <img src={cloudflare} alt="cloudflare" />
               <img src={prisma} alt="prisma" />
-              <img height={48} width={48} src={turborepo} alt="turborepo" />
+              <img src={turborepo} alt="turborepo" />
               <img src={docker} alt="docker" />
             </div>
           </div>
           <div className="tools">
             <p>Tools</p>
             <div className="imgWrapper2">
-              <img height={48} width={48} src={vscode} alt="vscode" />
-              <img height={48} width={48} src={git} alt="git" />
-              <img height={48} width={48} src={github} alt="github" />
-              <img height={48} width={48} src={npm} alt="npm" />
+              <img src={vscode} alt="vscode" />
+              <img src={git} alt="git" />
+              <img src={github} alt="github" />
+              <img src={npm} alt="npm" />
               <img src={postman} alt="postman" />
-              <img height={48} width={48} src={hopscotch} alt="hopscotch" />
-              <img height={48} width={48} src={ts} alt="typescript" />
-              <img height={48} width={48} src={node} alt="node" />
+              <img src={ts} alt="typescript" />
+              <img src={node} alt="node" />
             </div>
           </div>
         </aside>
