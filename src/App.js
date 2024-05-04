@@ -27,7 +27,7 @@ function App() {
   }, [ratio])
 
 
-  return ratio < 2.15 ? (
+  return (
     <>
       <Headerphone menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <Header menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
@@ -38,9 +38,7 @@ function App() {
       <Footer />
       <Toaster />
     </>
-  ) : (
-    <em id="customMessage">Please change the ratio to view!</em>
-  );
+  )
 }
 
 export default App;
