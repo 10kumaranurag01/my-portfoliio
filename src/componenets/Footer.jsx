@@ -44,7 +44,7 @@ const Footer = () => {
         </a>
       </footer>
       <div className="updatedDate">
-        <p>Last Updated: 30th Apr 2024</p>
+        <p>Last Updated: 13th Sept 2024</p>
       </div>
     </>
   );
