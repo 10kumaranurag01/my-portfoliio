@@ -11,20 +11,39 @@ const Work = () => {
         <article>
           <div className="workItem">
             <div className="imageWrapper">
-                <img
-                  src="https://i.ibb.co/r7Fjk4X/medeumpng.png"
-                  alt="medeumpng"
-                  border="0"
-                />
+              <img
+                src="https://i.ibb.co/V35MwRm/Screenshot-from-2024-10-01-16-57-55.png"
+                alt="To-Do Done"
+              />
+            </div>
+            <aside>
+              <h3>To-Do Done</h3>
+              <p>
+                A full-stack app with two main screens: a task list screen and a
+                Kanban board screen. The frontend is powered by ShadCN , which
+                helped keep the design clean and responsive.
+              </p>
+              <a target="blank" href="https://todo-done.anuragg.top/">
+                View Demo
+              </a>
+            </aside>
+          </div>
+          <div className="workItem">
+            <div className="imageWrapper">
+              <img
+                src="https://i.ibb.co/r7Fjk4X/medeumpng.png"
+                alt="medeumpng"
+                border="0"
+              />
             </div>
 
             <aside>
               <h3>Medeum</h3>
               <p>
                 While building this project i learned a PostgreSQL, cloudflare
-                workers, database connection pooling, custom react hooks and Prisma
-                ORM, which gave me deep insights
-                about full stack development.
+                workers, database connection pooling, custom react hooks and
+                Prisma ORM, which gave me deep insights about full stack
+                development.
               </p>
               <a target="blank" href="https://medeum.anuragg.top">
                 View Demo
@@ -116,26 +135,6 @@ const Work = () => {
                 about store, reducers, action and payload.
               </p>
               <a target="blank" href="https://react-cart-app-eta.vercel.app/">
-                View Demo
-              </a>
-            </aside>
-          </div>
-          <div className="workItem">
-            <div className="imageWrapper">
-              <img
-                src="https://cdn.pixabay.com/photo/2020/03/19/21/25/cactus-4948833_960_720.jpg"
-                alt="PORTFOLIO"
-              />
-            </div>
-
-            <aside>
-              <h3>PORTFOLIO</h3>
-              <p>
-                This is my portfolio which I made to showcase my skills and it
-                also has a contact form which uses firebase to store all the
-                messages.
-              </p>
-              <a target="blank" href="/">
                 View Demo
               </a>
             </aside>
