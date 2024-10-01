@@ -48,7 +48,7 @@ const Home = () => {
           />
 
           <div>
-            <a href="mailto:kumarkas1515+portfolio@gmail.com">Hire Me</a>
+            <a href="mailto:kumarkas1515@gmail.com">Hire Me</a>
             <a href="#work">
               Projects <BsArrowUpRight />
             </a>
@@ -81,9 +81,9 @@ const Home = () => {
             <article>
               <h3>What I Do</h3>
               <p>
-              As a novice full-stack web developer, I'm poised to embark on a
-              journey of learning and growth, aspiring to contribute my
-              technical acumen to cutting-edge projects.
+                As a novice full-stack web developer, I'm poised to embark on a
+                journey of learning and growth, aspiring to contribute my
+                technical acumen to cutting-edge projects.
               </p>
             </article>
           </div>
