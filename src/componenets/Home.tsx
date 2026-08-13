@@ -19,10 +19,15 @@ const TELEMETRY_LINES = [
   "status: ok",
 ];
 
-// Typed once at module scope: the ">" prompt glyph gets its own cyan span,
+// Typed once at module scope: the "›" prompt glyph gets its own cyan span,
 // the rest of each line inherits the terminal's default phosphor colour.
+// "›" (not ">") because typeString() parses this HTML through a detached
+// element and types back its *serialised* innerHTML — which escapes a
+// literal ">" in text position to "&gt;" and then types that out literally,
+// entity and all. "›" isn't touched by HTML serialisation, so it survives
+// the round-trip. It's also already this site's prompt glyph (Capabilities.tsx).
 const TELEMETRY_HTML = TELEMETRY_LINES.map(
-  (line) => `<span class="text-cyan">></span> ${line}`,
+  (line) => `<span class="text-cyan">›</span> ${line}`,
 ).join("<br />");
 
 const triggerClass =
@@ -78,7 +83,7 @@ const Home = () => {
           <div className="flex flex-col gap-1 text-sm text-phosphor">
             {TELEMETRY_LINES.map((line) => (
               <p key={line}>
-                <span className="text-cyan">{">"}</span> {line}
+                <span className="text-cyan">{"›"}</span> {line}
               </p>
             ))}
             <span
