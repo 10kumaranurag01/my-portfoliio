@@ -4,7 +4,6 @@
 
 export type ContactProtocol = {
   protocol: string; // "mailto" | "tel" | "geo" | "linkedin" | "github" | "https"
-  label: string; // what is displayed
   value: string; // the address text
   href: string | null; // null for geo
 };
@@ -40,37 +39,31 @@ export const summary =
 export const protocols: readonly ContactProtocol[] = Object.freeze([
   {
     protocol: "mailto",
-    label: "kumarkas1515@gmail.com",
     value: "kumarkas1515@gmail.com",
     href: "mailto:kumarkas1515@gmail.com",
   },
   {
     protocol: "tel",
-    label: "+91 9078943749",
     value: "+91 9078943749",
-    href: "tel:+91 9078943749",
+    href: "tel:+919078943749",
   },
   {
     protocol: "geo",
-    label: "Bhubaneshwar, India",
     value: "Bhubaneshwar, India",
     href: null,
   },
   {
     protocol: "linkedin",
-    label: "LinkedIn",
     value: "linkedin.com/in/kumar-anurag-858948207",
     href: "https://www.linkedin.com/in/kumar-anurag-858948207/",
   },
   {
     protocol: "github",
-    label: "GitHub",
     value: "github.com/10kumaranurag01",
     href: "https://github.com/10kumaranurag01/",
   },
   {
     protocol: "https",
-    label: "Portfolio",
     value: "myportfolio.anuragg.top",
     href: "https://myportfolio.anuragg.top",
   },
