@@ -17,13 +17,13 @@ export const Window = ({
   <div
     className={`rounded border border-line bg-carbon p-3 mq-600:p-2 ${className}`}
   >
-    <div className="mb-2 flex items-center gap-2">
+    <div className="mb-2 flex min-w-0 items-center gap-2">
       <span className="flex items-center gap-1" aria-hidden="true">
         <span className="h-1 w-1 rounded-full bg-bar-red" />
         <span className="h-1 w-1 rounded-full bg-bar-yellow" />
         <span className="h-1 w-1 rounded-full bg-bar-green" />
       </span>
-      <span className="text-2xs uppercase tracking-widest text-phosphor-dim">
+      <span className="truncate text-2xs uppercase tracking-widest text-phosphor-dim">
         {title}
       </span>
       {meta && <span className="ml-auto text-2xs text-mute">{meta}</span>}
