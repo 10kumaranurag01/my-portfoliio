@@ -20,7 +20,7 @@ ESLint 9 flat config in `eslint.config.js` (`js.configs.recommended` + `typescri
 
 Prettier runs on defaults (`.prettierrc` is `{}`), which already matched the codebase — double quotes, semicolons, 2-space, 80 columns. It does not reflow the contents of the multi-line Tailwind `className` strings, since those are string literals.
 
-Deploys via Vercel (`.vercel` is gitignored); no deploy config is committed.
+Deploys via Vercel (`.vercel` is gitignored). `vercel.json` pins `framework: vite` and `outputDirectory: dist`, because the Vercel project predates the migration and its dashboard settings still pointed at CRA's `build` directory — the deploy failed with `No Output Directory named "build" found`. `vercel.json` takes precedence over the dashboard, so the fix lives in the repo rather than in project settings. If someone later switches the dashboard preset to Vite, this file becomes redundant but stays harmless.
 
 ## Architecture
 
