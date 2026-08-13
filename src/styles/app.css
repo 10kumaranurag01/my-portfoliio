@@ -1,27 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&family=Roboto:wght@100;300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ---------------------------------------------------------------------------
-   Mode tokens. UIThemeProvider sets data-ui="design" | "dev" on <html>;
-   everything mode-dependent resolves through these variables, so section
-   components need no per-mode markup.
-   The accent is the same token in both modes by design.
-   --------------------------------------------------------------------------- */
 @layer base {
   :root {
-    --ui-accent: #ff79c6;
-    --ui-step: 8px; /* the spacing metric, shared with tailwind.config.js */
-    --ui-bg: #fef2f2;
-    --ui-fg: #161616;
-    --ui-panel: #f9e5e5;
-    --ui-line: #16161622;
-    --ui-guide: #ff79c64d;
-    --ui-grid-minor: #ff79c61f;
-    --ui-grid-major: #ff79c63d;
-
     /* CRT layer tunables (retro-ai-crt-overhaul), consumed by .crt-* below */
     --crt-scanline-period: 3px;
     --crt-scan-duration: 7s;
@@ -30,16 +12,6 @@
     --crt-bezel-radius: 20px;
     --crt-bezel-radius-sm: 12px;
     --crt-vignette-strength: 0.9;
-  }
-
-  [data-ui="dev"] {
-    --ui-bg: #14151b;
-    --ui-fg: #e7e7ee;
-    --ui-panel: #1c1e28;
-    --ui-line: #ffffff1f;
-    --ui-guide: #ff79c666;
-    --ui-grid-minor: transparent;
-    --ui-grid-major: transparent;
   }
 
   html {
@@ -67,25 +39,6 @@
       color 0.3s;
   }
 
-  /* Dev layout reads as source: monospaced throughout. */
-  [data-ui="dev"] body {
-    font-family: theme("fontFamily.mono");
-  }
-
-  /* Design layout: Figma-style canvas. Minor lines sit on the 8px metric,
-     major lines every 8 steps, so the grid is the spacing system made visible.
-     Neutralised (background-image: none) so it cannot fight the CRT grid
-     layer (.crt-grid) — the rule stays for Task 9 to remove, it just no
-     longer paints anything. */
-  [data-ui="design"] body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: none;
-  }
-
   /* Visible against black, per global constraint 8. */
   :focus-visible {
     outline: 2px solid theme("colors.cyan.DEFAULT");
@@ -99,92 +52,6 @@
 }
 
 @layer components {
-  /* Section shell. Design mode = dashed mockup guides + measurement label.
-     Dev mode = solid modular container block + code-style label. */
-  .ui-block {
-    @apply relative;
-  }
-
-  [data-ui="design"] .ui-block {
-    outline: 1px dashed var(--ui-guide);
-    outline-offset: calc(var(--ui-step) * -1);
-  }
-
-  [data-ui="dev"] .ui-block {
-    @apply my-1 rounded;
-    border: 1px solid var(--ui-line);
-    background-color: color-mix(in srgb, var(--ui-panel) 55%, transparent);
-  }
-
-  .ui-block-label {
-    @apply pointer-events-none absolute left-1 top-1 z-40 hidden select-none
-           px-1 py-0.5 font-mono text-xs tracking-tight;
-    background-color: var(--ui-bg);
-    color: var(--ui-accent);
-    border: 1px solid var(--ui-guide);
-  }
-
-  [data-ui="design"] .ui-block-label,
-  [data-ui="dev"] .ui-block-label {
-    @apply block;
-  }
-
-  /* Code syntax tokens, used by the dev-layout labels and any future
-     source overlays. Dracula-family hues, anchored on the accent. */
-  .tok-punct {
-    color: var(--ui-fg);
-    opacity: 0.55;
-  }
-  .tok-tag {
-    color: var(--ui-accent);
-  }
-  .tok-attr {
-    @apply text-accent-soft;
-  }
-  .tok-str {
-    @apply text-dot-yellow;
-  }
-
-  /* Neon pointer, design mode only. Position comes from --nx/--ny, written
-     by UIThemeProvider on pointermove. */
-  .neon-cursor {
-    @apply pointer-events-none fixed z-[999] hidden;
-    left: var(--nx, -100px);
-    top: var(--ny, -100px);
-    width: calc(var(--ui-step) * 3);
-    height: calc(var(--ui-step) * 3);
-    margin-left: calc(var(--ui-step) * -1.5);
-    margin-top: calc(var(--ui-step) * -1.5);
-    border: 1px solid var(--ui-accent);
-    border-radius: 9999px;
-    box-shadow: theme("boxShadow.neon");
-    transition:
-      transform 0.12s ease-out,
-      opacity 0.2s;
-  }
-
-  .neon-cursor::after {
-    content: "";
-    position: absolute;
-    inset: calc(var(--ui-step) * 0.875);
-    border-radius: 9999px;
-    background-color: var(--ui-accent);
-    box-shadow: theme("boxShadow.neon");
-  }
-
-  /* Only take over the pointer where there is a real one, and never when the
-     visitor has asked for reduced motion. */
-  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    [data-ui="design"] .neon-cursor {
-      @apply block;
-    }
-    [data-ui="design"] body,
-    [data-ui="design"] a,
-    [data-ui="design"] button {
-      cursor: none;
-    }
-  }
-
   /* ---------------------------------------------------------------------
      CRT overlay layers (retro-ai-crt-overhaul). Fixed, non-interactive,
      stacked over the whole viewport; consumed by <CRTScreen> (Task 3).

@@ -55,10 +55,15 @@ const Footer = () => (
           {SHORTLINKS.map(({ protocol, Icon, label }) => {
             const entry = protocols.find((item) => item.protocol === protocol);
             if (!entry?.href) return null;
+            // mailto opens a mail client, not a browser tab; github/linkedin
+            // leave the page, so they get target/rel like the resume link.
+            const isExternal = protocol !== "mailto";
             return (
               <a
                 key={protocol}
                 href={entry.href}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noreferrer" : undefined}
                 aria-label={label}
                 className="text-phosphor-dim transition-colors hover:text-cyan hover:shadow-glow-cyan"
               >

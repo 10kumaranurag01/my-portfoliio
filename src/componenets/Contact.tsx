@@ -11,6 +11,12 @@ const inputClass =
 const submitClass =
   "self-start border border-line px-3 py-1 text-2xs uppercase tracking-widest text-phosphor-dim transition-colors hover:border-cyan hover:text-cyan hover:shadow-glow-cyan disabled:cursor-not-allowed disabled:text-mute disabled:hover:border-line disabled:hover:text-mute disabled:hover:shadow-none";
 
+// mailto: and tel: open a local app, not a browser tab — target="_blank" is
+// meaningless there. Every other linked protocol (linkedin, github, https)
+// leaves the page, so it gets the same treatment as the header's resume link.
+const isExternalProtocol = (protocol: string) =>
+  protocol !== "mailto" && protocol !== "tel";
+
 const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -62,6 +68,16 @@ const Contact = () => {
                     {entry.href ? (
                       <a
                         href={entry.href}
+                        target={
+                          isExternalProtocol(entry.protocol)
+                            ? "_blank"
+                            : undefined
+                        }
+                        rel={
+                          isExternalProtocol(entry.protocol)
+                            ? "noreferrer"
+                            : undefined
+                        }
                         className="hover:text-cyan hover:underline"
                       >
                         {entry.value}

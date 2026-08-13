@@ -24,43 +24,41 @@ Deploys via Vercel (`.vercel` is gitignored). `vercel.json` pins `framework: vit
 
 ## Architecture
 
-Single-page portfolio site. TypeScript + TSX, no router. `index.html` lives in the project root (Vite convention) and loads `/src/main.tsx`, which mounts `App`; `App` wraps everything in `UIThemeProvider` and renders a fixed list of section components top to bottom. Navigation is anchor links (`#home`, `#services`, `#work`, `#contact`) against `id`s on the section wrappers — adding a "page" means adding a section component + an `id` + an entry in the `navLinks` array in `Header.tsx`.
+Single-page portfolio site. TypeScript + TSX, no router. `index.html` lives in the project root (Vite convention) and loads `/src/main.tsx`, which mounts `App`; `App` wraps a fixed list of section components in `<CRTScreen>` and renders them top to bottom: `Header`, `Headerphone`, `Home`, `Work`, `Capabilities`, `Contact`, `Footer`, `Toaster`. Navigation is anchor links (`#home`, `#work`, `#capabilities`, `#contact`) against `id`s on the section wrappers — adding a "page" means adding a section component + an `id` + an entry in the `NAV_LINKS` array in `Header.tsx`.
 
 `public/` is Vite's static-copy directory: files there are served from `/` verbatim (`/favicon.ico`, `/manifest.json`). Anything imported from `src/assets` goes through the bundler and gets hashed instead.
 
 **`src/componenets/` is misspelled on disk.** Every import depends on it. Don't rename it as a drive-by cleanup.
 
-### Styling — Tailwind, tokens enforced by override
+### Styling — Tailwind, retro-CRT tokens enforced by override
 
-All styling is Tailwind utilities in TSX. `src/styles/app.css` is the only stylesheet, imported once in `main.tsx`; it holds the `@tailwind` directives, the `--ui-*` custom properties, and a small `@layer components` block. There are no SCSS files and no CSS modules.
+All styling is Tailwind utilities in TSX. `src/styles/app.css` is the only stylesheet, imported once in `main.tsx`; it holds the `@tailwind` directives, the `--crt-*` custom properties, and a `@layer components` block with the CRT overlay layers. There are no SCSS files and no CSS modules.
 
-Tailwind is wired through `postcss.config.js` (tailwindcss + autoprefixer), which Vite picks up automatically. If that file goes missing the build still succeeds but ships `@tailwind`/`@apply` unprocessed and every utility class dies — symptom is a ~3 kB `dist/assets/index-*.css` instead of ~22 kB. `package.json` is `"type": "module"`, so `postcss.config.js` and `tailwind.config.js` are both ESM (`export default`, not `module.exports`).
+Tailwind is wired through `postcss.config.js` (tailwindcss + autoprefixer), which Vite picks up automatically. If that file goes missing the build still succeeds but ships `@tailwind`/`@apply` unprocessed and every utility class dies — symptom is a ~3 kB `dist/assets/index-*.css` instead of tens of kB (currently ~16 kB). `package.json` is `"type": "module"`, so `postcss.config.js` and `tailwind.config.js` are both ESM (`export default`, not `module.exports`).
 
 `tailwind.config.js` overrides (not extends) three scales, so the system is enforced rather than merely offered:
 
-- **`spacing`** — 8px metric only: `1` = 8px, `2` = 16px, … plus a `0.5` = 4px half-step and the viewport page gutters (`page`, `page-md`, `page-base`, `page-sm`). Off-grid values must be written as arbitrary values (`p-[13px]`), which makes them visible in review. Ported values from the old SCSS were snapped to the nearest multiple of 8, so a few sizes moved by a pixel or two (nav height 100px → 96px, footer avatar 100px → 96px).
-- **`colors`** — project palette only, so a stray `bg-blue-500` generates no CSS instead of shipping an off-palette colour. Primary accent is `accent` = `#ff79c6` (this replaced the previous orange `#f26440` everywhere).
+- **`spacing`** — 8px metric only: `1` = 8px, `2` = 16px, … plus a `0.5` = 4px half-step and the viewport page gutters (`page`, `page-md`, `page-base`, `page-sm`). Off-grid values must be written as arbitrary values (`p-[13px]`), which makes them visible in review.
+- **`colors`** — project palette only, so a stray `bg-blue-500` generates no CSS instead of shipping an off-palette colour. The palette is the retro-CRT set: `void` (page base, matte black), `carbon` / `carbon-raised` / `carbon-sunk` (window chrome fills), `phosphor` / `phosphor-bright` / `phosphor-dim` (body text and headings), `cyan` / `cyan-dim` (links, active state), `amber` (warn/highlight), `mute` (disabled/meta text), `line` / `line-bright` (1px borders), and `bar-red`/`bar-orange`/`bar-yellow`/`bar-green`/`bar-cyan`/`bar-blue` (the mandated 6-stripe rainbow, in that order). There is no `accent` token any more — the previous pink/orange accent system and its `canvas`/`slate`/`ink`/`teal`/`smoke`/`rule`/`dot` colours were removed wholesale in the retro-CRT overhaul (see "Removed" below).
 - **`screens`** — the site's breakpoints are all max-width and named `mq-1367`, `mq-1100`, `mq-900`, `mq-786`, `mq-600`, `mq-425`, listed widest first so narrower queries win. There are no `sm:`/`md:`/`lg:` variants; `mq-900:gap-2` means "at 900px and below".
 
-Font sizes larger than Tailwind's defaults are `text-display`, `text-display-sm`, `text-display-xs`. The old keyframes are `animate-chevron`, `animate-float`, `animate-float-lg`.
+One family, monospace-only: JetBrains Mono (400/500/700), loaded via `<link>` in `index.html` (preconnect + stylesheet), not a CSS `@import`. `fontFamily.sans`/`display`/`mono` all alias the same stack so nothing falls back to a proportional face. Font sizes larger than Tailwind's defaults are `text-display`, `text-display-sm`, `text-display-xs`, plus a `text-2xs` for meta/label text. `boxShadow.glow` / `glow-cyan` back the `.text-glow` / `.text-glow-cyan` phosphor/cyan text-shadow utilities.
 
-### Layout modes
+`tailwind.config.js`'s `keyframes`/`animation` are only the four CRT-motion ones — `scan` (scanline sweep), `drift` (matrix grid), `caret` (terminal cursor blink), `flicker` (overlay flicker) — plus a matching `@media (prefers-reduced-motion: reduce)` block in `app.css` that sets `animation: none` on the two animated CRT layers. `plugins: []`; there is no Tailwind plugin registered.
 
-`src/componenets/UITheme.tsx` holds the whole mechanic in one file:
+### CRT shell
 
-- `UIThemeProvider` — owns the mode (`"design"` | `"dev"`), persists it to `localStorage` under `ui-layout-mode`, and writes it to `<html data-ui="...">`. Also renders the neon pointer and updates its `--nx`/`--ny` from `pointermove` directly on the DOM node, so pointer movement never re-renders React.
-- `useUITheme()` — `{ mode, setMode, toggleMode }`.
-- `LayoutToggle` — the switch, mounted in both `Header` and `Headerphone`.
-- `Block` — section shell. Replaces the section's root `<div id=...>` rather than wrapping it, so it adds no DOM depth. Renders the per-mode chrome and the code-style label.
+The portfolio used to ship a light-themed `design`/`dev` dual-layout mode (toggle button, `<html data-ui="...">`, neon cursor, `design:`/`dev:` Tailwind variants) alongside the CRT rebuild so every intermediate commit kept compiling. That mechanic — `src/componenets/UITheme.tsx`, its `UIThemeProvider`/`useUITheme`/`LayoutToggle`/`Block` exports, the `--ui-*` custom properties, and the `design:`/`dev:` variant plugin — has been deleted; there is now exactly one visual theme.
 
-Because the mode lives on `<html>`, **mode-dependent styling is CSS, not conditional JSX**. Two ways to hook it:
+`App.tsx` renders the section list directly, wrapped in `<CRTScreen>` (`src/componenets/crt/CRTScreen.tsx`). `CRTScreen` returns a fragment — it adds no wrapper element, so it creates no scroll or stacking container over the sticky header — and renders four fixed, `aria-hidden`, `pointer-events: none` overlay layers after its children: `.crt-grid` (drifting matrix grid, `z-index: -1`), `.crt-scanlines` (static fine lines plus an animated sweep bar, `z-index: 200`), `.crt-vignette` (corner darkening, `z-index: 201`), `.crt-bezel` (rounded inset frame, `z-index: 202`). All four are defined in `app.css`'s `@layer components` and tuned by the `--crt-*` custom properties declared on `:root`.
 
-- `design:` / `dev:` Tailwind variants (registered as a plugin in `tailwind.config.js`) — e.g. `dev:bg-[var(--ui-panel)]`.
-- the `--ui-*` custom properties in `app.css`, which are redefined under `[data-ui="dev"]`. Anything that should invert between modes (page background, body text) reads `var(--ui-bg)` / `var(--ui-fg)` instead of a palette token. Surfaces that stay dark in both modes (`bg-slate` on Services and the Contact aside, `bg-ink` on the footer) use palette tokens directly.
+Three more shared primitives live in `src/componenets/crt/` (all re-exported from `crt/index.ts`):
 
-Design mode draws its 8px canvas grid on `body::before`, keyed to `--ui-step` so the grid _is_ the spacing metric. The neon pointer only takes over `cursor` behind `@media (pointer: fine) and (prefers-reduced-motion: no-preference)`.
+- `RainbowBar` — the 6 `bar-*` stripes, `flex`, each `flex-1`; `height` is `"thin"` (4px) or `"thick"` (8px).
+- `Window` — the charcoal container used for every card/panel: `bg-carbon`, `border border-line`, rounded, a title strip with three chrome dots plus a monospace `title`/`meta` label.
+- `SectionShell` — the section wrapper: `<section id>` + a `// NN — LABEL` heading + a `RainbowBar` divider + children. This replaces the old `Block`.
 
-Not built yet: the raw-source snippet overlays for dev mode. The syntax-token classes (`.tok-tag`, `.tok-attr`, `.tok-str`, `.tok-punct`) exist and are currently only used by the `Block` label.
+Every mode-dependent CSS hook (`design:`/`dev:` variants, `--ui-*` properties, `.ui-block*`, `.neon-cursor*`, `.tok-*`) is gone along with the components that used it — styling is one static Tailwind config now, no data-attribute branching.
 
 ### Firebase
 
@@ -68,13 +66,20 @@ Not built yet: the raw-source snippet overlays for dev mode. The syntax-token cl
 
 ### Content locations
 
-Content is hardcoded in JSX, not fetched:
+`src/data/resume.ts` is the single source of resume content — every name, title, date, company, bullet, skill and contact address rendered anywhere on the site is exported from here, traced back to the resume in `docs/superpowers/plans/resume-source.tex`. No component hardcodes resume strings (the mandated verbatim UI copy — the hero headline and the carousel's three trigger labels — is UI copy, not resume data, and stays in its component). What it exports and who reads it:
 
-- **Projects** — the `projects` array at the top of `Work.tsx` (`{title, img, url, blurb}`). Add a project by adding an entry; the card chrome is written once.
-- **Tech icons** — the `technologies` and `tools` arrays in `Services.tsx`, built from ~24 individual asset imports, some with spaces or commas in the filename.
-- **Resume** — `src/assets/Kumar_Anurag.pdf`, imported as a module in `Home.tsx` and `Services.tsx`. Replacing the file is enough; all three links follow.
-- Local images are ES-module imports from `src/assets`; several project screenshots in `Work.tsx` and the avatar in `Footer.tsx` are hardcoded remote URLs (ibb.co, pixabay, githubusercontent) that can rot.
+- `profile` — name, title, location. Read by `Header`, `Home`, `Footer`.
+- `summary` — the one-paragraph bio. Read by `Home`.
+- `protocols` — contact addresses (`mailto`, `tel`, `geo`, `linkedin`, `github`, `https`), each `{protocol, value, href}` with `href: null` for `geo`. Read by `Header` (email + resume link), `Contact` (the protocol table), `Footer` (the channel icons).
+- `skillGroups` — the capability lists. Read by `Capabilities` and referenced by `Home`'s boot telemetry (`skillGroups.length`).
+- `experience` — the work-history carousel entries (`{id, company, role, period, cluster, bullets, stack}`). Read by `Work`.
+- `credentials` — education/certifications. Read by `Footer`.
+- `resumeFile` — re-exported module import of `src/assets/Kumar_Anurag.pdf`. Read by `Header` and `Home`. Replacing the PDF is enough; both links follow.
+
+Local images are ES-module imports from `src/assets`; the `src/componenets/crt/` primitives and section components otherwise use only Tailwind utilities and `react-icons`, no other image assets.
 
 ### Removed in the Vite/TypeScript migration
 
 `Timeline.jsx`, `Testimonial.jsx` and `src/assets/data.json` were unrendered dead code carrying class names from the deleted SCSS; they were dropped rather than converted. `react-scripts`, `sass`, `web-vitals` and the `@testing-library/*` packages went with them (nothing imported them, and there was no `reportWebVitals` call or test file). Recover any of it from the history if it turns out to be wanted.
+
+The retro-CRT overhaul that followed removed the rest of the pre-existing system: `Services.tsx` was renamed to `Capabilities.tsx` (the component itself was already rewritten); `src/componenets/UITheme.tsx` and the whole `design`/`dev` dual-layout mode were deleted (see "CRT shell" above); the superseded `tailwind.config.js` palette entries (`accent`, `canvas`, `slate`, `ink`, `teal`, `smoke`, `rule`, `dot`), `boxShadow` entries (`window`, `neon`) and keyframes/animations (`animateSvg`/`chevron`, `upanddown`/`float`, `upupdowndown`/`float-lg`) were removed once nothing in `src/` referenced them; and the `framer-motion` dependency was dropped from `package.json` once its last import was replaced. `src/assets` still holds several dozen now-unimported PNGs, a stray JPG and `Deedy_CV.pdf` from before the rewrite — unimported files aren't bundled, so they were left on disk rather than cleaned up.

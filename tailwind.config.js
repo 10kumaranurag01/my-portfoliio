@@ -1,5 +1,3 @@
-import plugin from "tailwindcss/plugin";
-
 /**
  * Single source of truth for the design tokens.
  *
@@ -58,28 +56,7 @@ export default {
       white: "#ffffff",
       black: "#000000",
 
-      // primary accent
-      accent: {
-        DEFAULT: "#ff79c6",
-        hover: "#e85fae",
-        deep: "#c73f8b",
-        soft: "#ffa6d8",
-      },
-
-      canvas: { DEFAULT: "#fef2f2", sunk: "#f9e5e5" },
-      slate: { DEFAULT: "#292b46", deep: "#202235" },
-      ink: {
-        DEFAULT: "#161616",
-        60: "#16161698",
-        15: "#16161622",
-      },
-      teal: { DEFAULT: "#286f6c", deep: "#174340" },
-      mute: "#6f6f7a", // CRT value wins over the old design-mode `#a2a2a2`
-      smoke: "#f5f5f5",
-      rule: "#808080",
-
-      // window chrome dots
-      dot: { red: "#ff5f57", yellow: "#febc2e", green: "#28c840" },
+      mute: "#6f6f7a",
 
       // CRT design system (retro-ai-crt-overhaul), see design-system.md
       void: "#000000",
@@ -143,15 +120,10 @@ export default {
         "2xs": ["0.6875rem", { lineHeight: "1.4" }],
       },
       boxShadow: {
-        window: "0 0 7px #16161698",
-        neon: "0 0 8px #ff79c6, 0 0 24px #ff79c680",
         glow: "0 0 8px #7dffb0, 0 0 24px #7dffb066",
         "glow-cyan": "0 0 8px #66e8ff, 0 0 24px #66e8ff66",
       },
       keyframes: {
-        animateSvg: { to: { transform: "translate(-50%, -10px)" } },
-        upanddown: { to: { transform: "translateY(-5px)" } },
-        upupdowndown: { to: { transform: "translateY(-10px)" } },
         scan: {
           from: { transform: "translate3d(0, -100%, 0)" },
           to: { transform: "translate3d(0, 100vh, 0)" },
@@ -170,9 +142,6 @@ export default {
         },
       },
       animation: {
-        chevron: "animateSvg 0.7s infinite linear alternate",
-        float: "upanddown 0.7s infinite linear alternate",
-        "float-lg": "upupdowndown 0.7s infinite linear alternate",
         scan: "scan 7s linear infinite",
         drift: "drift 20s linear infinite",
         caret: "caret 1s steps(2) infinite",
@@ -180,12 +149,5 @@ export default {
       },
     },
   },
-  plugins: [
-    // Layout-mode variants: `design:` and `dev:` key off the data attribute
-    // that UIThemeProvider writes onto <html>.
-    plugin(({ addVariant }) => {
-      addVariant("design", '[data-ui="design"] &');
-      addVariant("dev", '[data-ui="dev"] &');
-    }),
-  ],
+  plugins: [],
 };
