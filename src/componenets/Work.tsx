@@ -1,12 +1,9 @@
 import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
-import { SectionShell, Window } from "./crt";
+import { SectionShell, Window, triggerClass } from "./crt";
 import { experience } from "../data/resume";
 
 const SWIPE_THRESHOLD = 40;
 const SLIDE_COUNT = experience.length;
-
-const triggerClass =
-  "border border-line px-3 py-1 text-2xs uppercase tracking-widest text-phosphor-dim transition-colors hover:border-cyan hover:text-cyan hover:shadow-glow-cyan";
 
 const chipClass = "border border-line px-1 text-2xs text-cyan";
 
@@ -66,19 +63,21 @@ const Work = () => {
   };
 
   return (
-    <SectionShell id="work" index="02" label="SELECTED WORK">
+    <SectionShell id="work" index="01" label="SELECTED WORK">
       <div
-        className="flex flex-col gap-4 touch-pan-y"
+        className="flex flex-col gap-4"
         tabIndex={0}
         role="group"
         aria-roledescription="carousel"
         aria-label="Selected work, by resume entry"
         onKeyDown={handleKeyDown}
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={resetPointerStart}
       >
-        <div className="overflow-hidden">
+        <div
+          className="overflow-hidden touch-pan-y"
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={resetPointerStart}
+        >
           <div
             className="flex transition-transform duration-500
                        ease-[cubic-bezier(.22,.61,.36,1)] will-change-transform
@@ -102,13 +101,13 @@ const Work = () => {
                     meta={`${pad(index + 1)} / ${pad(SLIDE_COUNT)}`}
                   >
                     <div className="flex flex-col gap-3">
-                      <h3
+                      <p
                         className="text-display-xs uppercase tracking-widest
                                    text-phosphor-bright text-glow
                                    mq-600:text-lg"
                       >
                         {headline}
-                      </h3>
+                      </p>
                       <p className="text-2xs uppercase tracking-widest text-cyan">
                         {entry.role} &middot; {entry.period}
                       </p>
@@ -125,7 +124,7 @@ const Work = () => {
                         {entry.bullets.map((bullet, bulletIndex) => (
                           <li key={bulletIndex} className="flex gap-2">
                             <span className="text-cyan" aria-hidden="true">
-                              &gt;
+                              ›
                             </span>
                             <span>{bullet}</span>
                           </li>
@@ -164,12 +163,18 @@ const Work = () => {
               aria-label={`Go to model ${index + 1}`}
               aria-current={index === activeIndex ? "true" : undefined}
               onClick={() => goTo(index)}
-              className={`h-2 w-2 rounded-full transition-colors ${
-                index === activeIndex
-                  ? "bg-cyan"
-                  : "bg-line hover:bg-line-bright"
-              }`}
-            />
+              className="group p-1"
+            >
+              {/* Visual dot stays 8px; the button's padding is the 24px
+                  WCAG 2.2 hit area. */}
+              <span
+                className={`block h-1 w-1 rounded-full transition-colors ${
+                  index === activeIndex
+                    ? "bg-cyan"
+                    : "bg-line group-hover:bg-line-bright"
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>

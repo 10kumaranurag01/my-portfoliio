@@ -69,6 +69,14 @@ export const protocols: readonly ContactProtocol[] = Object.freeze([
   },
 ]);
 
+// mailto: and tel: open a local app, not a browser tab — target="_blank" is
+// meaningless there (and wrong for tel:). Every other linked protocol
+// (linkedin, github, https) leaves the page, so it gets target="_blank".
+// Shared by Contact's protocol table and Footer's channel icons so the two
+// can't disagree on which protocols count as "external".
+export const isExternalProtocol = (protocol: string) =>
+  protocol !== "mailto" && protocol !== "tel";
+
 export const skillGroups: readonly SkillGroup[] = Object.freeze([
   {
     id: "genai-llms",

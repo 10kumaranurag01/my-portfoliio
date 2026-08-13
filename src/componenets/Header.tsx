@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { RainbowBar } from "./crt";
+import { RainbowBar, triggerClassSm } from "./crt";
 import { profile, protocols, resumeFile } from "../data/resume";
 
 type MenuProps = {
@@ -10,12 +10,14 @@ type MenuProps = {
 
 // Terminal-path presentation, shared verbatim between the desktop bar and the
 // mobile menu so the two never diverge. `href` targets the section id the
-// later tasks own; `label` is the path segment shown to the visitor.
+// later tasks own; `label` is the stylised path segment shown to the
+// visitor; `aria` is the plain accessible name (the "~/" prefix reads as
+// "tilde slash" to a screen reader, so it doesn't belong in the a11y tree).
 const NAV_LINKS = [
-  { label: "home", href: "#home" },
-  { label: "work", href: "#work" },
-  { label: "stack", href: "#capabilities" },
-  { label: "contact", href: "#contact" },
+  { label: "home", href: "#home", aria: "Home" },
+  { label: "work", href: "#work", aria: "Work" },
+  { label: "stack", href: "#capabilities", aria: "Stack" },
+  { label: "contact", href: "#contact", aria: "Contact" },
 ] as const;
 
 // Single source of the contact email: found by protocol, never hardcoded.
@@ -27,8 +29,7 @@ const navLinkClass =
 const actionLinkClass =
   "text-2xs uppercase tracking-widest text-phosphor-dim transition-colors hover:text-cyan hover:text-glow-cyan";
 
-const emailLinkClass =
-  "border border-line px-2 py-0.5 text-2xs uppercase tracking-widest text-phosphor-dim transition-colors hover:border-cyan hover:text-cyan hover:shadow-glow-cyan";
+const emailLinkClass = triggerClassSm;
 
 const Header = ({ setMenuOpen, menuOpen }: MenuProps) => (
   <>
@@ -48,11 +49,12 @@ const Header = ({ setMenuOpen, menuOpen }: MenuProps) => (
         </p>
 
         <div className="flex items-center gap-4 mq-900:gap-2 mq-786:hidden">
-          {NAV_LINKS.map(({ label, href }) => (
+          {NAV_LINKS.map(({ label, href, aria }) => (
             <a
               key={href}
               href={href}
               onClick={() => setMenuOpen(false)}
+              aria-label={aria}
               className={navLinkClass}
             >
               ~/{label}
@@ -64,6 +66,7 @@ const Header = ({ setMenuOpen, menuOpen }: MenuProps) => (
           {emailProtocol && (
             <a
               href={emailProtocol.href ?? undefined}
+              aria-label="Email"
               className={emailLinkClass}
             >
               [ EMAIL ]
@@ -115,12 +118,13 @@ export const Headerphone = ({ menuOpen, setMenuOpen }: MenuProps) => {
       </p>
 
       <div className="flex flex-col items-center gap-4">
-        {NAV_LINKS.map(({ label, href }) => (
+        {NAV_LINKS.map(({ label, href, aria }) => (
           <a
             key={href}
             href={href}
             tabIndex={tabIndex}
             onClick={() => setMenuOpen(false)}
+            aria-label={aria}
             className={navLinkClass}
           >
             ~/{label}
@@ -133,6 +137,7 @@ export const Headerphone = ({ menuOpen, setMenuOpen }: MenuProps) => {
           <a
             href={emailProtocol.href ?? undefined}
             tabIndex={tabIndex}
+            aria-label="Email"
             className={emailLinkClass}
           >
             [ EMAIL ]

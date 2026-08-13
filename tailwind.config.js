@@ -43,6 +43,9 @@ export default {
       14: "112px",
       16: "128px",
       20: "160px",
+      // sticky header height (RainbowBar 4px + h-12 96px), the one place
+      // that number is allowed to live — see scroll-mt-nav usages.
+      nav: "100px",
       // page gutters kept viewport-relative, as the original layout was
       page: "13.33vmax",
       "page-md": "7vmax",
@@ -56,9 +59,10 @@ export default {
       white: "#ffffff",
       black: "#000000",
 
-      mute: "#6f6f7a",
+      mute: "#8a8a96",
 
-      // CRT design system (retro-ai-crt-overhaul), see design-system.md
+      // CRT design system (retro-ai-crt-overhaul), see
+      // docs/superpowers/plans/retro-ai-crt-overhaul.md
       void: "#000000",
       carbon: {
         DEFAULT: "#0b0b0e",

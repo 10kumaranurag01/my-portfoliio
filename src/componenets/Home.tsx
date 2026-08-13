@@ -1,7 +1,13 @@
 import { useState } from "react";
 import Typewriter from "typewriter-effect";
-import { Window } from "./crt";
+import { Window, triggerClass } from "./crt";
 import { profile, summary, skillGroups, resumeFile } from "../data/resume";
+
+// Escapes &/</> before a value goes into TELEMETRY_HTML below — see that
+// comment for why: typeString() round-trips this string through innerHTML,
+// which re-escapes any of these three characters in text position.
+const esc = (s: string) =>
+  s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]!);
 
 // Boot-sequence telemetry. Every fact traces back to resume.ts — the two
 // framing lines ("booting..."/"status: ok") are terminal chrome, everything
@@ -9,9 +15,9 @@ import { profile, summary, skillGroups, resumeFile } from "../data/resume";
 // count, or a technical term lifted verbatim from an experience bullet.
 const TELEMETRY_LINES = [
   "booting kandyr agent runtime...",
-  `operator: ${profile.name}`,
-  `role: ${profile.title}`,
-  `location: ${profile.location}`,
+  `operator: ${esc(profile.name)}`,
+  `role: ${esc(profile.title)}`,
+  `location: ${esc(profile.location)}`,
   `skill groups registered: ${skillGroups.length}`,
   "side-effects: read / write / external / artifact",
   "guardrails: fail-closed guardrails, tenant-isolation",
@@ -26,12 +32,13 @@ const TELEMETRY_LINES = [
 // literal ">" in text position to "&gt;" and then types that out literally,
 // entity and all. "›" isn't touched by HTML serialisation, so it survives
 // the round-trip. It's also already this site's prompt glyph (Capabilities.tsx).
+// The same round-trip is why every interpolated value above goes through
+// `esc`: none of profile.name/title/location contains "&"/"<"/">" today, but
+// skillGroups[].label already does ("Generative AI & LLMs"), and the comment
+// above invites pulling more resume data into these lines later.
 const TELEMETRY_HTML = TELEMETRY_LINES.map(
   (line) => `<span class="text-cyan">›</span> ${line}`,
 ).join("<br />");
-
-const triggerClass =
-  "border border-line px-3 py-1 text-2xs uppercase tracking-widest text-phosphor-dim transition-colors hover:border-cyan hover:text-cyan hover:shadow-glow-cyan";
 
 const Home = () => {
   // Checked once, synchronously, on first render — not a listener, so the
@@ -43,10 +50,10 @@ const Home = () => {
   return (
     <section
       id="home"
-      className="grid min-h-[calc(100vh-100px)] grid-cols-[1.15fr_1fr]
-                 items-center gap-8 px-page py-12 mq-1367:px-page-md
-                 mq-1100:px-page-base mq-900:grid-cols-1 mq-900:gap-6
-                 mq-900:px-page-sm mq-900:py-8"
+      className="scroll-mt-nav grid min-h-[calc(100vh-theme(spacing.nav))]
+                 grid-cols-[1.15fr_1fr] items-center gap-8 px-page py-12
+                 mq-1367:px-page-md mq-1100:px-page-base mq-900:grid-cols-1
+                 mq-900:gap-6 mq-900:px-page-sm mq-900:py-8"
     >
       <div className="flex flex-col items-start gap-4">
         <p className="text-2xs uppercase tracking-[0.3em] text-cyan">
@@ -78,7 +85,7 @@ const Home = () => {
         </div>
       </div>
 
-      <Window title="~/kandyr/agent --stream" meta="loop" className="w-full">
+      <Window title="~/kandyr/agent --stream" meta="loop">
         {prefersReducedMotion ? (
           <div className="flex flex-col gap-1 text-sm text-phosphor">
             {TELEMETRY_LINES.map((line) => (

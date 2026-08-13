@@ -1,7 +1,12 @@
 import type { IconType } from "react-icons";
 import { AiFillGithub, AiFillLinkedin, AiOutlineMail } from "react-icons/ai";
 import { RainbowBar } from "./crt";
-import { profile, credentials, protocols } from "../data/resume";
+import {
+  profile,
+  credentials,
+  protocols,
+  isExternalProtocol,
+} from "../data/resume";
 
 // Order mandated by the brief: github, linkedin, mailto. Looked up by
 // `protocol` field so the addresses stay single-sourced from resume.ts.
@@ -55,9 +60,9 @@ const Footer = () => (
           {SHORTLINKS.map(({ protocol, Icon, label }) => {
             const entry = protocols.find((item) => item.protocol === protocol);
             if (!entry?.href) return null;
-            // mailto opens a mail client, not a browser tab; github/linkedin
-            // leave the page, so they get target/rel like the resume link.
-            const isExternal = protocol !== "mailto";
+            // Shared with Contact's protocol table via `isExternalProtocol`
+            // in resume.ts, so the two can't disagree on this again.
+            const isExternal = isExternalProtocol(protocol);
             return (
               <a
                 key={protocol}

@@ -16,13 +16,13 @@
 
   html {
     color-scheme: dark;
+    scroll-behavior: smooth;
   }
 
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    scroll-behavior: smooth;
   }
 
   a {
@@ -34,9 +34,6 @@
     color: theme("colors.phosphor.DEFAULT");
     font-family: theme("fontFamily.mono");
     overflow-x: hidden;
-    transition:
-      background-color 0.3s,
-      color 0.3s;
   }
 
   /* Visible against black, per global constraint 8. */
@@ -148,6 +145,10 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
     .crt-sweep,
     .crt-grid {
       animation: none;

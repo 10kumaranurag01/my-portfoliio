@@ -2,20 +2,13 @@ import { useState, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
-import { SectionShell, Window } from "./crt";
-import { protocols } from "../data/resume";
+import { SectionShell, Window, triggerClass } from "./crt";
+import { protocols, isExternalProtocol } from "../data/resume";
 
 const inputClass =
   "w-full border border-line bg-carbon-sunk px-2 py-1 text-sm text-phosphor placeholder:text-mute transition-colors focus:border-cyan";
 
-const submitClass =
-  "self-start border border-line px-3 py-1 text-2xs uppercase tracking-widest text-phosphor-dim transition-colors hover:border-cyan hover:text-cyan hover:shadow-glow-cyan disabled:cursor-not-allowed disabled:text-mute disabled:hover:border-line disabled:hover:text-mute disabled:hover:shadow-none";
-
-// mailto: and tel: open a local app, not a browser tab — target="_blank" is
-// meaningless there. Every other linked protocol (linkedin, github, https)
-// leaves the page, so it gets the same treatment as the header's resume link.
-const isExternalProtocol = (protocol: string) =>
-  protocol !== "mailto" && protocol !== "tel";
+const submitClass = `${triggerClass} self-start disabled:cursor-not-allowed disabled:text-mute disabled:hover:border-line disabled:hover:text-mute disabled:hover:shadow-none`;
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -41,10 +34,11 @@ const Contact = () => {
   };
 
   return (
-    <SectionShell id="contact" index="04" label="CONTACT">
+    <SectionShell id="contact" index="03" label="CONTACT">
       <div className="grid grid-cols-2 gap-4 mq-900:grid-cols-1">
         <Window title="~/protocols">
           <table className="w-full border-collapse text-left text-sm">
+            <caption className="sr-only">Contact protocols</caption>
             <thead>
               <tr className="border-b border-line text-2xs tracking-widest text-phosphor-dim">
                 <th scope="col" className="py-2 pr-4 font-medium">

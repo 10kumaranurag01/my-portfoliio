@@ -5,7 +5,7 @@ import { skillGroups } from "../data/resume";
 // numbers here, both derived from `skillGroups` — no invented skill levels,
 // percentages, or year counts.
 const Capabilities = () => (
-  <SectionShell id="capabilities" index="03" label="CAPABILITIES">
+  <SectionShell id="capabilities" index="02" label="CAPABILITIES">
     <div className="grid grid-cols-2 gap-4 mq-900:grid-cols-1">
       {skillGroups.map((group, index) => (
         <Window
