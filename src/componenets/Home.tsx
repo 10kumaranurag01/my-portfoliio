@@ -22,7 +22,7 @@ const TELEMETRY_LINES = [
 // Typed once at module scope: the ">" prompt glyph gets its own cyan span,
 // the rest of each line inherits the terminal's default phosphor colour.
 const TELEMETRY_HTML = TELEMETRY_LINES.map(
-  (line) => `<span class="text-cyan">&gt;</span> ${line}`,
+  (line) => `<span class="text-cyan">></span> ${line}`,
 ).join("<br />");
 
 const triggerClass =
