@@ -1,5 +1,11 @@
+import type { Dispatch, SetStateAction } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { LayoutToggle } from "./UITheme";
+
+type MenuProps = {
+  menuOpen: boolean;
+  setMenuOpen: Dispatch<SetStateAction<boolean>>;
+};
 
 const navLinks = [
   ["Home", "#home"],
@@ -12,7 +18,7 @@ const emailBtn = `border border-ink-60 px-4 py-1 bg-[var(--ui-bg)] cursor-pointe
   text-[var(--ui-fg)] tracking-[1px] font-medium transition-colors
   hover:bg-ink hover:text-white dev:border-[var(--ui-line)]`;
 
-const Header = ({ setMenuOpen, menuOpen }) => (
+const Header = ({ setMenuOpen, menuOpen }: MenuProps) => (
   <>
     <nav
       className="sticky top-0 z-[60] flex h-12 w-full items-center justify-between
@@ -55,7 +61,7 @@ const Header = ({ setMenuOpen, menuOpen }) => (
   </>
 );
 
-export const Headerphone = ({ menuOpen, setMenuOpen }) => (
+export const Headerphone = ({ menuOpen, setMenuOpen }: MenuProps) => (
   <div
     className={`fixed top-0 z-[100] flex h-screen w-full flex-col items-center
                 justify-center gap-6 bg-slate p-page-base transition-transform

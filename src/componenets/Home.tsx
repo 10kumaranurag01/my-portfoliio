@@ -15,8 +15,18 @@ const animations = {
 const blurb =
   "As a novice full-stack web developer, I'm poised to embark on a journey of learning and growth, aspiring to contribute my technical acumen to cutting-edge projects.";
 
+type WindowCardProps = {
+  className?: string;
+  linkClass?: string;
+  headingClass?: string;
+};
+
 /** The mockup window, shown wide on desktop and stacked below 1367px. */
-const WindowCard = ({ className = "", linkClass = "", headingClass = "" }) => (
+const WindowCard = ({
+  className = "",
+  linkClass = "",
+  headingClass = "",
+}: WindowCardProps) => (
   <div
     className={`flex-col items-center justify-center rounded-[5px] border
                 border-accent bg-[var(--ui-bg)] shadow-window w-[80%] ${className}`}

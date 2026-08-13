@@ -5,27 +5,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm start                       # dev server on http://localhost:3000
-npm run build                   # production build to /build
-npm test                        # Jest watch mode (react-scripts test)
-npm test -- --testPathPattern=Contact --watchAll=false   # single test file, no watch
+npm start                       # dev server on http://localhost:3000 (alias of `npm run dev`)
+npm run build                   # tsc --noEmit, then production build to /dist
+npm run preview                 # serve the built /dist
+npm run typecheck               # tsc --noEmit on its own
 ```
 
-Create React App (`react-scripts` 5) — no separate lint step; ESLint (`react-app` config) runs as part of `start`/`build` and surfaces warnings in the terminal and browser console. No test files exist yet.
+Vite 7 + `@vitejs/plugin-react`, TypeScript in `strict` mode. There is no ESLint and no test runner — `tsc --noEmit` (wired into `build`) is the only static check. No test files exist.
 
 Deploys via Vercel (`.vercel` is gitignored); no deploy config is committed.
 
 ## Architecture
 
-Single-page portfolio site. Plain JavaScript + JSX, no TypeScript, no router. `src/index.js` mounts `App`, which wraps everything in `UIThemeProvider` and renders a fixed list of section components top to bottom. Navigation is anchor links (`#home`, `#services`, `#work`, `#contact`) against `id`s on the section wrappers — adding a "page" means adding a section component + an `id` + an entry in the `navLinks` array in `Header.jsx`.
+Single-page portfolio site. TypeScript + TSX, no router. `index.html` lives in the project root (Vite convention) and loads `/src/main.tsx`, which mounts `App`; `App` wraps everything in `UIThemeProvider` and renders a fixed list of section components top to bottom. Navigation is anchor links (`#home`, `#services`, `#work`, `#contact`) against `id`s on the section wrappers — adding a "page" means adding a section component + an `id` + an entry in the `navLinks` array in `Header.tsx`.
+
+`public/` is Vite's static-copy directory: files there are served from `/` verbatim (`/favicon.ico`, `/manifest.json`). Anything imported from `src/assets` goes through the bundler and gets hashed instead.
 
 **`src/componenets/` is misspelled on disk.** Every import depends on it. Don't rename it as a drive-by cleanup.
 
 ### Styling — Tailwind, tokens enforced by override
 
-All styling is Tailwind utilities in JSX. `src/styles/app.css` is the only stylesheet, imported once in `index.js`; it holds the `@tailwind` directives, the `--ui-*` custom properties, and a small `@layer components` block. There are no SCSS files and no CSS modules.
+All styling is Tailwind utilities in TSX. `src/styles/app.css` is the only stylesheet, imported once in `main.tsx`; it holds the `@tailwind` directives, the `--ui-*` custom properties, and a small `@layer components` block. There are no SCSS files and no CSS modules.
 
-**Tailwind is wired through CRA's built-in support, which is gated on the literal existence of `tailwind.config.js` in the project root** (`node_modules/react-scripts/config/webpack.config.js:72`). If that file is renamed (`.cjs`, `.mjs`, `.ts`) or moved, react-scripts silently swaps Tailwind out of its PostCSS chain: the build still succeeds, but `@tailwind`/`@apply` ship to the browser unprocessed and every utility class dies. Symptom is a ~3 kB `main.*.css` instead of ~22 kB. CRACO is deliberately *not* used — it was tried and its `style.postcss` override did not reach the loader on react-scripts 5.
+Tailwind is wired through `postcss.config.js` (tailwindcss + autoprefixer), which Vite picks up automatically. If that file goes missing the build still succeeds but ships `@tailwind`/`@apply` unprocessed and every utility class dies — symptom is a ~3 kB `dist/assets/index-*.css` instead of ~22 kB. `package.json` is `"type": "module"`, so `postcss.config.js` and `tailwind.config.js` are both ESM (`export default`, not `module.exports`).
 
 `tailwind.config.js` overrides (not extends) three scales, so the system is enforced rather than merely offered:
 
@@ -37,7 +39,7 @@ Font sizes larger than Tailwind's defaults are `text-display`, `text-display-sm`
 
 ### Layout modes
 
-`src/componenets/UITheme.jsx` holds the whole mechanic in one file:
+`src/componenets/UITheme.tsx` holds the whole mechanic in one file:
 
 - `UIThemeProvider` — owns the mode (`"design"` | `"dev"`), persists it to `localStorage` under `ui-layout-mode`, and writes it to `<html data-ui="...">`. Also renders the neon pointer and updates its `--nx`/`--ny` from `pointermove` directly on the DOM node, so pointer movement never re-renders React.
 - `useUITheme()` — `{ mode, setMode, toggleMode }`.
@@ -55,17 +57,17 @@ Not built yet: the raw-source snippet overlays for dev mode. The syntax-token cl
 
 ### Firebase
 
-`src/firebase.js` initializes the app and exports `db` (Firestore only — no Auth, no Storage). The config is hardcoded, not env-driven. The only write path is `Contact.jsx`, which `addDoc`s `{name, email, message}` into the `contacts` collection and reports via `react-hot-toast`. Anyone can post to that collection; access control lives in Firestore security rules on the Firebase console, not in this repo.
+`src/firebase.ts` initializes the app and exports `db` (Firestore only — no Auth, no Storage). The config is hardcoded, not env-driven. The only write path is `Contact.tsx`, which `addDoc`s `{name, email, message}` into the `contacts` collection and reports via `react-hot-toast`. Anyone can post to that collection; access control lives in Firestore security rules on the Firebase console, not in this repo.
 
 ### Content locations
 
 Content is hardcoded in JSX, not fetched:
 
-- **Projects** — the `projects` array at the top of `Work.jsx` (`{title, img, url, blurb}`). Add a project by adding an entry; the card chrome is written once.
-- **Tech icons** — the `technologies` and `tools` arrays in `Services.jsx`, built from ~24 individual asset imports, some with spaces or commas in the filename.
-- **Resume** — `src/assets/Kumar_Anurag.pdf`, imported as a module in `Home.jsx` and `Services.jsx`. Replacing the file is enough; all three links follow.
-- Local images are ES-module imports from `src/assets`; several project screenshots in `Work.jsx` and the avatar in `Footer.jsx` are hardcoded remote URLs (ibb.co, pixabay, githubusercontent) that can rot.
+- **Projects** — the `projects` array at the top of `Work.tsx` (`{title, img, url, blurb}`). Add a project by adding an entry; the card chrome is written once.
+- **Tech icons** — the `technologies` and `tools` arrays in `Services.tsx`, built from ~24 individual asset imports, some with spaces or commas in the filename.
+- **Resume** — `src/assets/Kumar_Anurag.pdf`, imported as a module in `Home.tsx` and `Services.tsx`. Replacing the file is enough; all three links follow.
+- Local images are ES-module imports from `src/assets`; several project screenshots in `Work.tsx` and the avatar in `Footer.tsx` are hardcoded remote URLs (ibb.co, pixabay, githubusercontent) that can rot.
 
-### Dead code
+### Removed in the Vite/TypeScript migration
 
-`Timeline.jsx` and `Testimonial.jsx` are not rendered by `App.js` and were not migrated — they still carry class names from the deleted SCSS, so they would render unstyled. `src/assets/data.json` was only ever read by `Timeline.jsx`, so nothing reads it now. Delete all three together, or migrate them, but don't assume they feed the live page.
+`Timeline.jsx`, `Testimonial.jsx` and `src/assets/data.json` were unrendered dead code carrying class names from the deleted SCSS; they were dropped rather than converted. `react-scripts`, `sass`, `web-vitals` and the `@testing-library/*` packages went with them (nothing imported them, and there was no `reportWebVitals` call or test file). Recover any of it from the history if it turns out to be wanted.

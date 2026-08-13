@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import { addDoc, collection } from "firebase/firestore";
@@ -27,7 +27,7 @@ const Contact = () => {
   const [message, setMessage] = useState("");
   const [disableBtn, setDisableBtn] = useState(false);
 
-  const submitHandler = async (e) => {
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setDisableBtn(true);
     try {

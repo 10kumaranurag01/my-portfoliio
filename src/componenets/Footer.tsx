@@ -1,3 +1,4 @@
+import type { IconType } from "react-icons";
 import {
   AiOutlineArrowUp,
   AiFillLinkedin,
@@ -5,7 +6,7 @@ import {
   AiFillGithub,
 } from "react-icons/ai";
 
-const socials = [
+const socials: [href: string, Icon: IconType, label: string][] = [
   ["https://www.linkedin.com/in/kumar-anurag-858948207/", AiFillLinkedin, "LinkedIn"],
   ["https://github.com/10kumaranurag01", AiFillGithub, "GitHub"],
   ["https://www.instagram.com/kumar_._anurag/", AiFillInstagram, "Instagram"],
