@@ -84,9 +84,9 @@ const Services = () => (
           and Express, I adeptly handle server-side rendering and API
           integration. Embracing modern development practices, I work within
           monorepo structures, utilizing Tailwind CSS for streamlined styling.
-          Eager to continue learning and collaborating, I'm excited to contribute
-          to cutting-edge projects and drive innovation in the ever-evolving
-          landscape of web development.
+          Eager to continue learning and collaborating, I'm excited to
+          contribute to cutting-edge projects and drive innovation in the
+          ever-evolving landscape of web development.
         </p>
       </article>
 

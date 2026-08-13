@@ -79,7 +79,7 @@ export const UIThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const toggleMode = useCallback(
     () => setMode((m) => (m === "design" ? "dev" : "design")),
-    []
+    [],
   );
 
   return (

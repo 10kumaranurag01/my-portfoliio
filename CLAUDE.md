@@ -9,9 +9,16 @@ npm start                       # dev server on http://localhost:3000 (alias of 
 npm run build                   # tsc --noEmit, then production build to /dist
 npm run preview                 # serve the built /dist
 npm run typecheck               # tsc --noEmit on its own
+npm run lint                    # eslint .
+npm run format                  # prettier --write .
+npm run format:check            # prettier --check . (CI-shaped, writes nothing)
 ```
 
-Vite 7 + `@vitejs/plugin-react`, TypeScript in `strict` mode. There is no ESLint and no test runner — `tsc --noEmit` (wired into `build`) is the only static check. No test files exist.
+Vite 7 + `@vitejs/plugin-react`, TypeScript in `strict` mode. `build` runs `tsc --noEmit` first; lint and format are separate and deliberately not wired into it. There is no test runner and no test files exist.
+
+ESLint 9 flat config in `eslint.config.js` (`js.configs.recommended` + `typescript-eslint` recommended + `react-hooks` + `react-refresh`, scoped to `src/**/*.{ts,tsx}`). `eslint-config-prettier` is extended **last**, so ESLint owns correctness and Prettier owns formatting with no overlapping rules — don't add `eslint-plugin-prettier`, formatting violations are not lint errors here. `typescript-eslint`'s type-checked configs are not enabled; the plain `recommended` set runs without a program, which keeps `npm run lint` fast.
+
+Prettier runs on defaults (`.prettierrc` is `{}`), which already matched the codebase — double quotes, semicolons, 2-space, 80 columns. It does not reflow the contents of the multi-line Tailwind `className` strings, since those are string literals.
 
 Deploys via Vercel (`.vercel` is gitignored); no deploy config is committed.
 
@@ -51,7 +58,7 @@ Because the mode lives on `<html>`, **mode-dependent styling is CSS, not conditi
 - `design:` / `dev:` Tailwind variants (registered as a plugin in `tailwind.config.js`) — e.g. `dev:bg-[var(--ui-panel)]`.
 - the `--ui-*` custom properties in `app.css`, which are redefined under `[data-ui="dev"]`. Anything that should invert between modes (page background, body text) reads `var(--ui-bg)` / `var(--ui-fg)` instead of a palette token. Surfaces that stay dark in both modes (`bg-slate` on Services and the Contact aside, `bg-ink` on the footer) use palette tokens directly.
 
-Design mode draws its 8px canvas grid on `body::before`, keyed to `--ui-step` so the grid *is* the spacing metric. The neon pointer only takes over `cursor` behind `@media (pointer: fine) and (prefers-reduced-motion: no-preference)`.
+Design mode draws its 8px canvas grid on `body::before`, keyed to `--ui-step` so the grid _is_ the spacing metric. The neon pointer only takes over `cursor` behind `@media (pointer: fine) and (prefers-reduced-motion: no-preference)`.
 
 Not built yet: the raw-source snippet overlays for dev mode. The syntax-token classes (`.tok-tag`, `.tok-attr`, `.tok-str`, `.tok-punct`) exist and are currently only used by the `Block` label.
 

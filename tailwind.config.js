@@ -86,7 +86,12 @@ export default {
       fontFamily: {
         sans: ['"Open Sans"', "sans-serif"],
         display: ['"Roboto"', "sans-serif"],
-        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
+        mono: [
+          '"JetBrains Mono"',
+          "ui-monospace",
+          "SFMono-Regular",
+          "monospace",
+        ],
       },
       fontSize: {
         display: ["4rem", { lineHeight: "1.05" }],

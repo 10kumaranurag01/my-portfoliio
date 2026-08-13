@@ -50,7 +50,10 @@ const WindowCard = ({
         >
           Download Resume
         </a>
-        <a href="#contact" className="text-canvas transition-colors hover:text-ink">
+        <a
+          href="#contact"
+          className="text-canvas transition-colors hover:text-ink"
+        >
           Contact
         </a>
       </div>
