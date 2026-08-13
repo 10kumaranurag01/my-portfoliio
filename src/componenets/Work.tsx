@@ -16,6 +16,7 @@ const Work = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const pointerStartX = useRef<number | null>(null);
+  const pointerStartY = useRef<number | null>(null);
 
   // Wrap, never disable: `Previous model` on the first slide goes to the
   // last, `Next model` on the last goes to the first. Both triggers are
@@ -38,23 +39,38 @@ const Work = () => {
 
   // Touch/trackpad swipe: a horizontal drag past the threshold advances one
   // slide in the drag direction. No drag-follow animation, no library.
+  // Pointer capture keeps the up/cancel events routed here even if the
+  // gesture ends outside the carousel; a real touch drag is rarely exactly
+  // horizontal, so we only commit once the horizontal delta dominates the
+  // vertical one (the container's `touch-pan-y` also leaves vertical page
+  // scroll to the browser instead of fighting it).
+  const resetPointerStart = () => {
+    pointerStartX.current = null;
+    pointerStartY.current = null;
+  };
+
   const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
     pointerStartX.current = event.clientX;
+    pointerStartY.current = event.clientY;
   };
 
   const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
     const startX = pointerStartX.current;
-    pointerStartX.current = null;
-    if (startX === null) return;
-    const delta = event.clientX - startX;
-    if (delta > SWIPE_THRESHOLD) goTo(activeIndex - 1);
-    else if (delta < -SWIPE_THRESHOLD) goTo(activeIndex + 1);
+    const startY = pointerStartY.current;
+    resetPointerStart();
+    if (startX === null || startY === null) return;
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    if (deltaX > SWIPE_THRESHOLD) goTo(activeIndex - 1);
+    else if (deltaX < -SWIPE_THRESHOLD) goTo(activeIndex + 1);
   };
 
   return (
     <SectionShell id="work" index="02" label="SELECTED WORK">
       <div
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-4 touch-pan-y"
         tabIndex={0}
         role="group"
         aria-roledescription="carousel"
@@ -62,6 +78,7 @@ const Work = () => {
         onKeyDown={handleKeyDown}
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
+        onPointerCancel={resetPointerStart}
       >
         <div className="overflow-hidden">
           <div
@@ -75,7 +92,12 @@ const Work = () => {
               // `cluster` is the resume subheading; the Cleveratti entry has
               // none, so fall back to `role` — data-driven, no special case.
               const headline = entry.cluster || entry.role;
-              const visibleBullets = expanded
+              // Gate on `isActive` too: the track renders all five slides at
+              // once (only one is visually shown), so an ungated `expanded`
+              // would expand every off-screen slide's content and inflate
+              // the shared-height flex row underneath the active one.
+              const isExpanded = expanded && isActive;
+              const visibleBullets = isExpanded
                 ? entry.bullets
                 : entry.bullets.slice(0, 2);
 
@@ -101,7 +123,7 @@ const Work = () => {
                         {entry.role} &middot; {entry.period}
                       </p>
 
-                      {expanded && (
+                      {isExpanded && (
                         <div className="flex flex-wrap gap-2">
                           {entry.stack.map((tech) => (
                             <span key={tech} className={chipClass}>
