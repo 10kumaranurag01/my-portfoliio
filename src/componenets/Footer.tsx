@@ -1,64 +1,84 @@
 import type { IconType } from "react-icons";
-import {
-  AiOutlineArrowUp,
-  AiFillLinkedin,
-  AiFillInstagram,
-  AiFillGithub,
-} from "react-icons/ai";
+import { AiFillGithub, AiFillLinkedin, AiOutlineMail } from "react-icons/ai";
+import { RainbowBar } from "./crt";
+import { profile, credentials, protocols } from "../data/resume";
 
-const socials: [href: string, Icon: IconType, label: string][] = [
-  [
-    "https://www.linkedin.com/in/kumar-anurag-858948207/",
-    AiFillLinkedin,
-    "LinkedIn",
-  ],
-  ["https://github.com/10kumaranurag01", AiFillGithub, "GitHub"],
-  ["https://www.instagram.com/kumar_._anurag/", AiFillInstagram, "Instagram"],
+// Order mandated by the brief: github, linkedin, mailto. Looked up by
+// `protocol` field so the addresses stay single-sourced from resume.ts.
+const SHORTLINKS: { protocol: string; Icon: IconType; label: string }[] = [
+  { protocol: "github", Icon: AiFillGithub, label: "GitHub" },
+  { protocol: "linkedin", Icon: AiFillLinkedin, label: "LinkedIn" },
+  { protocol: "mailto", Icon: AiOutlineMail, label: "Email" },
 ];
 
 const Footer = () => (
-  <>
-    <footer
-      className="relative grid min-h-12 grid-cols-[10fr_3fr_1fr] items-center
-                 justify-items-center bg-ink py-12 pl-page text-center text-white
-                 mq-1367:pl-page-md mq-900:grid-cols-1 mq-900:pl-0"
+  <footer className="border-t border-line bg-void">
+    <RainbowBar height="thick" />
+
+    <div
+      className="grid grid-cols-3 gap-8 px-page py-10 mq-1367:px-page-md
+                 mq-1100:px-page-base mq-900:px-page-sm mq-786:grid-cols-1
+                 mq-786:gap-6 mq-786:py-6"
     >
-      <div className="w-full border-l-2 border-r-2 border-white mq-900:border-none">
-        <img
-          src="https://avatars.githubusercontent.com/u/81381360?s=400&u=63d7eda0704449fd4878de3d2768bb288ea1416a&v=4"
-          alt="Founder"
-          className="h-12 w-12 rounded-full object-contain"
-        />
-        <h2 className="m-2">Kumar Anurag Sahu</h2>
-        <p className="text-[1.2rem] mq-900:mx-auto mq-900:my-4 mq-900:w-1/2">
-          Direction is more important than speed.
+      <div className="flex flex-col gap-1">
+        <p className="text-sm uppercase tracking-widest text-phosphor-bright">
+          {profile.name}
         </p>
+        <p className="text-2xs uppercase tracking-widest text-cyan">
+          {profile.title}
+        </p>
+        <p className="text-sm text-phosphor-dim">{profile.location}</p>
       </div>
 
-      <aside>
-        <h2>Social Media</h2>
-        <article className="mt-2 flex items-center justify-between">
-          {socials.map(([href, Icon, label]) => (
-            <a key={href} href={href} target="blank" aria-label={label}>
-              <Icon className="text-[2rem] text-white transition-colors hover:text-accent" />
-            </a>
+      <div className="flex flex-col gap-2">
+        <p className="text-2xs tracking-widest text-phosphor-dim">
+          EDUCATION &amp; CERTIFICATIONS
+        </p>
+        <ul className="flex flex-col gap-2">
+          {credentials.map((credential) => (
+            <li key={credential.title} className="text-sm text-phosphor">
+              <p>{credential.title}</p>
+              <p className="text-2xs text-mute">
+                {credential.org} &middot; {credential.period}
+              </p>
+              {credential.note && (
+                <p className="text-2xs text-mute">{credential.note}</p>
+              )}
+            </li>
           ))}
-        </article>
-      </aside>
+        </ul>
+      </div>
 
-      <a
-        href="#home"
-        aria-label="Back to top"
-        className="grid h-6 w-6 place-items-center rounded-full bg-white mq-900:m-2"
-      >
-        <AiOutlineArrowUp className="text-[2rem] text-accent" />
-      </a>
-    </footer>
-
-    <div className="bg-ink px-0.5 text-mute">
-      <p>Last Updated: 13th Sept 2024</p>
+      <div className="flex flex-col gap-2">
+        <p className="text-2xs tracking-widest text-phosphor-dim">CHANNELS</p>
+        <div className="flex items-center gap-4">
+          {SHORTLINKS.map(({ protocol, Icon, label }) => {
+            const entry = protocols.find((item) => item.protocol === protocol);
+            if (!entry?.href) return null;
+            return (
+              <a
+                key={protocol}
+                href={entry.href}
+                aria-label={label}
+                className="text-phosphor-dim transition-colors hover:text-cyan hover:shadow-glow-cyan"
+              >
+                <Icon aria-hidden="true" className="text-xl" />
+              </a>
+            );
+          })}
+        </div>
+      </div>
     </div>
-  </>
+
+    <div
+      className="border-t border-line px-page py-2 text-2xs text-mute
+                 mq-1367:px-page-md mq-1100:px-page-base mq-900:px-page-sm"
+    >
+      <p>
+        &copy; {new Date().getFullYear()} {profile.name}
+      </p>
+    </div>
+  </footer>
 );
 
 export default Footer;
