@@ -1,0 +1,173 @@
+%==============================================================
+% Kumar Anurag Sahu - Single-page ATS-friendly resume
+% Compile with: pdflatex resume.tex
+% Single column, no tables, no graphics, selectable text.
+%==============================================================
+\documentclass[letterpaper,9pt]{extarticle}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[scaled=0.92]{helvet}   % Helvetica/Arial-like body font
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[margin=0.5in,top=0.40in,bottom=0.30in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+
+\definecolor{accent}{HTML}{1F3A5F}
+\definecolor{bodytext}{HTML}{1A1A1A}
+\definecolor{graytext}{HTML}{3D3D3D}
+\color{bodytext}
+
+% --- PDF metadata (helps some parsers) ---
+\hypersetup{
+  pdftitle={Kumar Anurag Sahu - Resume},
+  pdfauthor={Kumar Anurag Sahu},
+  pdfsubject={Software Engineer - GenAI / Agentic AI}
+}
+
+% --- layout basics ---
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{0.93}
+\raggedright
+\raggedbottom
+
+% --- section headings: uppercase, accent colour, thin rule ---
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{accent}}
+  {}{0em}{}[\vspace{-5pt}{\color{accent}\rule{\linewidth}{0.7pt}}]
+\titlespacing*{\section}{0pt}{4pt}{3pt}
+
+% --- helpers ---
+% \role{COMPANY}{Title | Dates}
+\newcommand{\role}[2]{%
+  \textbf{\large #1}\\[1pt]
+  {\color{graytext}#2}\par\vspace{1.5pt}}
+
+% subsection label inside a job
+\newcommand{\subhead}[1]{\vspace{2.5pt}\textbf{\color{accent}#1}\par\vspace{1pt}}
+
+% bullet list
+\newenvironment{points}
+  {\begin{itemize}[leftmargin=11pt,itemsep=1.1pt,parsep=0pt,topsep=1pt,
+                   partopsep=0pt,label=\textbullet]}
+  {\end{itemize}}
+
+% skills line: \skillline{Label}{items}
+\newcommand{\skillline}[2]{\textbf{#1:} #2\par\vspace{2pt}}
+
+\begin{document}
+
+%==================== HEADER ====================
+{\LARGE\bfseries\color{accent}KUMAR ANURAG SAHU}\par\vspace{1.5pt}
+{\large\color{graytext}Software Engineer -- GenAI / Agentic AI}\par\vspace{2.5pt}
+Bhubaneshwar, India ~\textbullet~ +91 9078943749 ~\textbullet~
+\href{mailto:kumarkas1515@gmail.com}{\color{accent}kumarkas1515@gmail.com}\\[1.5pt]
+{\color{graytext}LinkedIn:}~\href{https://www.linkedin.com/in/kumar-anurag-858948207/}%
+{\color{accent}linkedin.com/in/kumar-anurag-858948207} ~\textbullet~
+{\color{graytext}GitHub:}~\href{https://github.com/10kumaranurag01/}%
+{\color{accent}github.com/10kumaranurag01} ~\textbullet~
+{\color{graytext}Portfolio:}~\href{https://myportfolio.anuragg.top}%
+{\color{accent}myportfolio.anuragg.top}
+
+%==================== SUMMARY ====================
+\section*{SUMMARY}
+Software Engineer specializing in Generative AI, LLM applications, and Agentic AI systems, with hands-on
+experience building production AI for enterprise freight and logistics workflows. Experienced in Mistral LLM
+integration, Retrieval-Augmented Generation (RAG), embeddings, vector search, semantic search, reranking,
+prompt engineering, structured function calling, tool calling, custom agent architectures, human-in-the-loop
+workflows, AI guardrails, and evaluation harnesses, backed by strong full-stack engineering in TypeScript,
+Node.js, React, MongoDB, REST APIs, event-driven systems, and AWS.
+
+%==================== CORE SKILLS ====================
+\section*{CORE SKILLS}
+\skillline{Generative AI \& LLMs}{Large Language Models (LLMs), Generative AI, Mistral, LLM Integration,
+Prompt Engineering, Structured Outputs, Function Calling, Tool Calling, Context-Window Management,
+AI Document Automation}
+\skillline{RAG \& Retrieval}{Retrieval-Augmented Generation (RAG), Embeddings, Semantic Search, Vector Search,
+kNN Retrieval, Reranking, MongoDB Atlas Vector Search, Voyage Embeddings, Voyage Reranking, Few-Shot Retrieval,
+LlamaParse}
+\skillline{Agentic AI \& Reliability}{AI Agents, Agentic Workflows, Custom Agent Architecture, Agent Loops,
+Tool Registry, Tool Dispatch, Human-in-the-Loop, Approval Workflows, Capability Gates, Action Gates,
+AI Guardrails, Evaluation Harnesses, Golden Datasets, Model Canaries, Confidence Scoring, Retry Logic,
+Audit Logging, Observability}
+\skillline{Engineering \& Cloud}{TypeScript, JavaScript, Node.js, Express.js, MongoDB, Mongoose, REST APIs, Zod,
+Server-Sent Events (SSE), Async Processing, Event-Driven Architecture, React 18, Next.js, Vite, RTK Query,
+AWS S3, AWS SQS FIFO, Docker, Valkey, CI/CD, Jest}
+
+%==================== EXPERIENCE ====================
+\section*{PROFESSIONAL EXPERIENCE}
+
+\role{REUDAN INTERNATIONAL}{Software Engineer -- GenAI / Agentic AI ~|~ November 2024 -- Present}
+
+\subhead{Generative AI \& Agentic AI}
+\begin{points}
+  \item Designed and built Kandyr Copilot, a production AI agent platform embedded in a freight-operations
+        application, enabling natural-language interaction with enterprise data, document workflows, artifact
+        generation, and gated business actions.
+  \item Built a custom agentic AI architecture with a server-side agent loop, policy-controlled execution
+        (interactive and headless modes, bounded step limits), tool registry, tool dispatch, structured tool
+        results, and SSE streaming; integrated Mistral LLMs for tool calling, structured function calls, and
+        document extraction.
+  \item Developed a natural-language-to-MongoDB query engine in which Mistral generates a constrained
+        intermediate representation, validated server-side against a field/operator allow-list and organization
+        scope before compilation into MongoDB aggregation pipelines.
+  \item Designed reusable LLM tool-calling infrastructure with typed input schemas, capability checks,
+        side-effect classification (read, write, external, artifact), preview/commit phases, and audit logging;
+        built tools for querying, document extraction, file generation, email, entity drafts, and readiness checks.
+  \item Implemented human-in-the-loop workflows where write and external actions produce an approval proposal and
+        commit only after explicit approval, with commit-time re-resolution of facts and gate re-evaluation; added
+        retries with exponential backoff, tool-call correlation, and context-window management via result
+        summarization and compact history digests.
+\end{points}
+
+\subhead{RAG, Vector Search \& Document AI}
+\begin{points}
+  \item Built an AI document-automation system using LlamaParse and Mistral to extract structured logistics and
+        accounting data from PDFs, with multi-document extraction, file-type tagging, engineered prompt
+        instructions, source-document preservation, and structured function-call schemas.
+  \item Implemented semantic entity resolution using MongoDB Atlas Vector Search, embeddings, fuzzy-matching
+        fallback, and Voyage reranking to match extracted vendors, charges, sites, and ports against master data;
+        applied RAG with Voyage embeddings and kNN retrieval of similar historical questions as few-shot context.
+\end{points}
+
+\subhead{AI Guardrails, Safety \& Evaluation}
+\begin{points}
+  \item Designed an AI-assisted purchase-invoice auto-conversion workflow with confidence thresholds,
+        bank-account validation, duplicate detection, rate/quantity validation, provenance tracking, and human
+        approval, plus a feedback loop converting validated corrections into vendor and charge aliases for future
+        matching.
+  \item Implemented fail-closed guardrails, capability and action gates, tenant-isolation controls, prompt-level
+        domain grounding and refusal rules, and AI action audit logging capturing tool, side-effect type, gate
+        decisions, latency, outcomes, and human corrections.
+  \item Developed approximately 20 server-side and 12 client-side test suites for Copilot and AI workflows, plus
+        a golden evaluation corpus, RAG seed corpus, and weekly real-Mistral canary to detect LLM regressions.
+\end{points}
+
+\subhead{Full-Stack AI Product \& Event-Driven Platform}
+\begin{points}
+  \item Built the React-based Copilot interface with streaming conversations, tool-call and approval cards,
+        entity drafts, attachments, and generated artifacts; implemented 19 Copilot API routes including 3 SSE
+        endpoints, consumed via 14 RTK Query client endpoints.
+  \item Designed an event-driven ETL pipeline using Valkey and AWS SQS FIFO to process booking lifecycle events
+        into a pre-aggregated daily MongoDB analytics cube, with frozen FX rates for financial correctness and
+        full-rebuild/dry-run reconciliation workflows.
+\end{points}
+
+\vspace{3pt}
+\role{CLEVERATTI SKILLS PVT LIMITED}{Junior Full Stack Developer Intern ~|~ May 2024 -- August 2024}
+\begin{points}
+  \item Analyzed an existing live codebase and independently built a complete web application, frontend and
+        backend, using the MERN stack.
+\end{points}
+
+%==================== EDUCATION & CERTIFICATIONS ====================
+\section*{EDUCATION \& CERTIFICATIONS}
+\textbf{Bachelor of Technology (B.Tech), Computer Science} -- SIET, Dhenkanal ~|~ 2020 -- 2024\par\vspace{2pt}
+\textbf{Full Stack Web Development Course} -- 100xDevs ~|~ Issued September 2024 ~|~ Credential ID: 0FFKL29X
+
+\end{document}
