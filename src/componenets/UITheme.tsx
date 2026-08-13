@@ -5,6 +5,9 @@ import {
   useEffect,
   useRef,
   useState,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
 } from "react";
 
 /**
@@ -20,24 +23,34 @@ import {
  * Components only need this context to render the toggle.
  */
 
-const MODES = ["design", "dev"];
+export type UIMode = "design" | "dev";
+
+type UIThemeValue = {
+  mode: UIMode;
+  setMode: Dispatch<SetStateAction<UIMode>>;
+  toggleMode: () => void;
+};
+
 const STORAGE_KEY = "ui-layout-mode";
 
-const UIThemeContext = createContext(null);
+const UIThemeContext = createContext<UIThemeValue | null>(null);
 
-const readStoredMode = () => {
+const isMode = (value: string | null): value is UIMode =>
+  value === "design" || value === "dev";
+
+const readStoredMode = (): UIMode => {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    return MODES.includes(stored) ? stored : "design";
+    return isMode(stored) ? stored : "design";
   } catch {
     // private mode / storage disabled
     return "design";
   }
 };
 
-export const UIThemeProvider = ({ children }) => {
-  const [mode, setMode] = useState(readStoredMode);
-  const cursorRef = useRef(null);
+export const UIThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [mode, setMode] = useState<UIMode>(readStoredMode);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-ui", mode);
@@ -53,7 +66,7 @@ export const UIThemeProvider = ({ children }) => {
   useEffect(() => {
     if (mode !== "design") return undefined;
 
-    const move = (e) => {
+    const move = (e: PointerEvent) => {
       const node = cursorRef.current;
       if (!node) return;
       node.style.setProperty("--nx", `${e.clientX}px`);
@@ -66,7 +79,7 @@ export const UIThemeProvider = ({ children }) => {
 
   const toggleMode = useCallback(
     () => setMode((m) => (m === "design" ? "dev" : "design")),
-    []
+    [],
   );
 
   return (
@@ -77,14 +90,14 @@ export const UIThemeProvider = ({ children }) => {
   );
 };
 
-export const useUITheme = () => {
+export const useUITheme = (): UIThemeValue => {
   const ctx = useContext(UIThemeContext);
   if (!ctx) throw new Error("useUITheme must be used inside <UIThemeProvider>");
   return ctx;
 };
 
 /** Mode switch. `compact` drops the label for the phone nav. */
-export const LayoutToggle = ({ compact = false }) => {
+export const LayoutToggle = ({ compact = false }: { compact?: boolean }) => {
   const { mode, toggleMode } = useUITheme();
   const next = mode === "design" ? "dev" : "design";
 
@@ -108,11 +121,18 @@ export const LayoutToggle = ({ compact = false }) => {
   );
 };
 
+type BlockProps = {
+  id: string;
+  label?: string;
+  className?: string;
+  children: ReactNode;
+};
+
 /**
  * Section shell. Renders the per-mode chrome (dashed guides in design mode,
  * container block + code label in dev mode) around an existing section.
  */
-export const Block = ({ id, label, className = "", children }) => (
+export const Block = ({ id, label, className = "", children }: BlockProps) => (
   <div id={id} className={`ui-block ${className}`}>
     <span className="ui-block-label">
       <span className="tok-punct">&lt;</span>

@@ -1,4 +1,4 @@
-const plugin = require("tailwindcss/plugin");
+import plugin from "tailwindcss/plugin";
 
 /**
  * Single source of truth for the design tokens.
@@ -14,8 +14,8 @@ const plugin = require("tailwindcss/plugin");
  *   - `screens`  : the site's breakpoints are all max-width, listed widest
  *                  first so narrower queries win.
  */
-module.exports = {
-  content: ["./src/**/*.{js,jsx}", "./public/index.html"],
+export default {
+  content: ["./src/**/*.{ts,tsx}", "./index.html"],
   theme: {
     screens: {
       "mq-1367": { max: "1367px" },
@@ -86,7 +86,12 @@ module.exports = {
       fontFamily: {
         sans: ['"Open Sans"', "sans-serif"],
         display: ['"Roboto"', "sans-serif"],
-        mono: ['"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "monospace"],
+        mono: [
+          '"JetBrains Mono"',
+          "ui-monospace",
+          "SFMono-Regular",
+          "monospace",
+        ],
       },
       fontSize: {
         display: ["4rem", { lineHeight: "1.05" }],
