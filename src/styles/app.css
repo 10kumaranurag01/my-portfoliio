@@ -21,6 +21,15 @@
     --ui-guide: #ff79c64d;
     --ui-grid-minor: #ff79c61f;
     --ui-grid-major: #ff79c63d;
+
+    /* CRT layer tunables (retro-ai-crt-overhaul), consumed by .crt-* below */
+    --crt-scanline-period: 3px;
+    --crt-scan-duration: 7s;
+    --crt-grid-step: 32px;
+    --crt-drift-duration: 20s;
+    --crt-bezel-radius: 20px;
+    --crt-bezel-radius-sm: 12px;
+    --crt-vignette-strength: 0.9;
   }
 
   [data-ui="dev"] {
@@ -31,6 +40,10 @@
     --ui-guide: #ff79c666;
     --ui-grid-minor: transparent;
     --ui-grid-major: transparent;
+  }
+
+  html {
+    color-scheme: dark;
   }
 
   * {
@@ -45,9 +58,9 @@
   }
 
   body {
-    background-color: var(--ui-bg);
-    color: var(--ui-fg);
-    font-family: theme("fontFamily.sans");
+    background: theme("colors.void");
+    color: theme("colors.phosphor.DEFAULT");
+    font-family: theme("fontFamily.mono");
     overflow-x: hidden;
     transition:
       background-color 0.3s,
@@ -60,23 +73,28 @@
   }
 
   /* Design layout: Figma-style canvas. Minor lines sit on the 8px metric,
-     major lines every 8 steps, so the grid is the spacing system made visible. */
+     major lines every 8 steps, so the grid is the spacing system made visible.
+     Neutralised (background-image: none) so it cannot fight the CRT grid
+     layer (.crt-grid) — the rule stays for Task 9 to remove, it just no
+     longer paints anything. */
   [data-ui="design"] body::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background-image:
-      linear-gradient(to right, var(--ui-grid-minor) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--ui-grid-minor) 1px, transparent 1px),
-      linear-gradient(to right, var(--ui-grid-major) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--ui-grid-major) 1px, transparent 1px);
-    background-size:
-      var(--ui-step) var(--ui-step),
-      var(--ui-step) var(--ui-step),
-      calc(var(--ui-step) * 8) calc(var(--ui-step) * 8),
-      calc(var(--ui-step) * 8) calc(var(--ui-step) * 8);
+    background-image: none;
+  }
+
+  /* Visible against black, per global constraint 8. */
+  :focus-visible {
+    outline: 2px solid theme("colors.cyan.DEFAULT");
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: theme("colors.carbon.DEFAULT");
+    color: theme("colors.phosphor.DEFAULT");
   }
 }
 
@@ -164,6 +182,104 @@
     [data-ui="design"] a,
     [data-ui="design"] button {
       cursor: none;
+    }
+  }
+
+  /* ---------------------------------------------------------------------
+     CRT overlay layers (retro-ai-crt-overhaul). Fixed, non-interactive,
+     stacked over the whole viewport; consumed by <CRTScreen> (Task 3).
+     --------------------------------------------------------------------- */
+  .crt-scanlines {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .crt-scanlines::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.06) 0,
+      rgba(0, 0, 0, 0.06) 1px,
+      transparent 1px,
+      transparent var(--crt-scanline-period)
+    );
+  }
+
+  .crt-sweep {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 160px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(125, 255, 176, 0.08),
+      transparent
+    );
+    animation: scan var(--crt-scan-duration) linear infinite;
+    will-change: transform;
+  }
+
+  .crt-grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(125, 255, 176, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(125, 255, 176, 0.04) 1px, transparent 1px);
+    background-size: var(--crt-grid-step) var(--crt-grid-step);
+    mask-image: radial-gradient(circle at 50% 40%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(
+      circle at 50% 40%,
+      black 0%,
+      transparent 75%
+    );
+    animation: drift var(--crt-drift-duration) linear infinite;
+  }
+
+  .crt-vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 220px rgba(0, 0, 0, var(--crt-vignette-strength));
+    background: radial-gradient(
+      ellipse at center,
+      transparent 55%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  }
+
+  .crt-bezel {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    border-radius: var(--crt-bezel-radius);
+    box-shadow:
+      inset 0 0 0 1px theme("colors.line.DEFAULT"),
+      inset 0 0 40px rgba(125, 255, 176, 0.06);
+  }
+
+  @media (max-width: 600px) {
+    .crt-bezel {
+      border-radius: var(--crt-bezel-radius-sm);
+    }
+  }
+
+  .text-glow {
+    text-shadow: 0 0 8px rgba(125, 255, 176, 0.6);
+  }
+
+  .text-glow-cyan {
+    text-shadow: 0 0 8px rgba(102, 232, 255, 0.6);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crt-sweep,
+    .crt-grid {
+      animation: none;
     }
   }
 }
