@@ -14,7 +14,7 @@ npm run format                  # prettier --write .
 npm run format:check            # prettier --check . (CI-shaped, writes nothing)
 ```
 
-Vite 7 + `@vitejs/plugin-react`, TypeScript in `strict` mode. `build` runs `tsc --noEmit` first; lint and format are separate and deliberately not wired into it. There is no test runner and no test files exist.
+Vite 7 + `@vitejs/plugin-react`, TypeScript in `strict` mode. `build` runs `tsc --noEmit` first; lint and format stay separate from it locally, and `.github/workflows/ci.yml` runs `lint`, `format:check` and `build` on every PR and on pushes to `main` (Node 24, `npm ci`). There is no test runner and no test files exist, so nothing runs tests in CI. Vercel builds independently of this workflow — a red CI run does not block a deploy.
 
 ESLint 9 flat config in `eslint.config.js` (`js.configs.recommended` + `typescript-eslint` recommended + `react-hooks` + `react-refresh`, scoped to `src/**/*.{ts,tsx}`). `eslint-config-prettier` is extended **last**, so ESLint owns correctness and Prettier owns formatting with no overlapping rules — don't add `eslint-plugin-prettier`, formatting violations are not lint errors here. `typescript-eslint`'s type-checked configs are not enabled; the plain `recommended` set runs without a program, which keeps `npm run lint` fast.
 
