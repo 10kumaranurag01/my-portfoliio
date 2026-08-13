@@ -1,106 +1,185 @@
-import { Block } from "./UITheme";
+import { useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { SectionShell, Window, triggerClass } from "./crt";
+import { experience } from "../data/resume";
 
-// Project cards. Same content as before, hoisted out of the markup so the card
-// chrome is written once.
-const projects = [
-  {
-    title: "To-Do Done",
-    img: "https://i.ibb.co/V35MwRm/Screenshot-from-2024-10-01-16-57-55.png",
-    url: "https://todo-done.anuragg.top/",
-    blurb:
-      "A full-stack app with two main screens: a task list screen and a Kanban board screen. The frontend is powered by ShadCN , which helped keep the design clean and responsive.",
-  },
-  {
-    title: "Medeum",
-    img: "https://i.ibb.co/r7Fjk4X/medeumpng.png",
-    url: "https://medeum.anuragg.top",
-    blurb:
-      "While building this project i learned a PostgreSQL, cloudflare workers, database connection pooling, custom react hooks and Prisma ORM, which gave me deep insights about full stack development.",
-  },
-  {
-    title: "PROMPTOPIA",
-    img: "https://media.istockphoto.com/id/1498577422/photo/hand-of-businessman-holding-phone-with-smart-robot-enters-command-to-create-something.jpg?s=2048x2048&w=is&k=20&c=9ygFs5hc2Zw3wd0ydqDAH2qcGCJ2uXnb-WOs0SickpA=",
-    url: "https://promptopia-a7sb2hx2l-10kumaranurag01.vercel.app/",
-    blurb:
-      "While building this project i learned a little bit of backend where i used MongoDB for database and most importantly i used NEXT.js to build this app which made developing really easy.",
-  },
-  {
-    title: "KASMedia",
-    img: "https://cdn.pixabay.com/photo/2020/11/22/04/10/youtube-5765608_1280.png",
-    url: "https://yt-clone-lgutq3wn4-10kumaranurag01.vercel.app/",
-    blurb:
-      "I made a Youtube clone using reactJS, it has livestream feature to interact with viewers and the host can join as separately. It fetches actual youtube data from youtube API from rapidAPI.",
-  },
-  {
-    title: "XCrypto",
-    img: "https://cdn.pixabay.com/photo/2017/12/12/12/44/bitcoin-3014614_960_720.jpg",
-    url: "https://react-crypto-app-ruddy.vercel.app/",
-    blurb:
-      "This is crypto webapp made using ReactJS. I used ChakraUI for UI elements and ChartJS for crypto coin stats. This app fetches real time data from an API.",
-  },
-  {
-    title: "REACT CART",
-    img: "https://cdn.pixabay.com/photo/2019/12/14/08/36/shopping-4694470_960_720.jpg",
-    url: "https://react-cart-app-eta.vercel.app/",
-    blurb:
-      "This is a simple cart app, with dummy data. Basically while building this project I learned about Redux Toolkit. I learned about store, reducers, action and payload.",
-  },
-];
+const SWIPE_THRESHOLD = 40;
+const SLIDE_COUNT = experience.length;
 
-const card = `m-1 flex h-[28rem] w-[25rem] flex-col items-center justify-evenly
-  rounded-[10px] border-2 border-accent bg-canvas-sunk p-2
-  dev:border-[var(--ui-line)] dev:bg-[var(--ui-panel)]
-  mq-1367:h-[25rem] mq-1367:w-[22rem] mq-1100:h-[24rem] mq-1100:w-[18rem]
-  mq-900:h-[22rem] mq-900:w-[16rem] mq-786:h-[22rem] mq-786:w-[18rem]
-  mq-600:h-[28rem] mq-600:w-[80%] mq-425:h-[25rem]`;
+const chipClass = "border border-line px-1 text-2xs text-cyan";
 
-const Work = () => (
-  <Block
-    id="work"
-    label="work"
-    className="flex h-[150vh] w-full flex-col items-center justify-center overflow-hidden
-               mq-1367:px-page-md mq-1367:py-16 mq-1100:px-page-base
-               mq-900:h-[130vh] mq-900:px-0 mq-786:h-[180vh]
-               mq-600:h-[380vh] mq-425:h-[340vh]"
-  >
-    <h2 className="mb-2 border-b-[3px] border-rule text-[2rem] font-semibold">
-      WORK
-    </h2>
+const pad = (value: number) => String(value).padStart(2, "0");
 
-    <section className="mq-786:w-full">
-      <article className="grid grid-cols-3 place-items-center overflow-y-hidden mq-786:grid-cols-2 mq-600:grid-cols-1">
-        {projects.map(({ title, img, url, blurb }) => (
-          <div key={title} className={card}>
-            <div className="flex h-1/2 items-center justify-center">
-              <img
-                src={img}
-                alt={title}
-                className="block h-[12rem] w-full object-cover
-                           mq-1367:h-[9rem] mq-1100:h-[7rem] mq-900:h-[6rem]
-                           mq-786:h-[6.5rem] mq-600:h-[10rem] mq-425:h-[8rem]"
-              />
-            </div>
+const Work = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const pointerStartX = useRef<number | null>(null);
+  const pointerStartY = useRef<number | null>(null);
 
-            <aside className="flex h-1/2 flex-col items-center justify-center p-2 text-center">
-              <h3 className="text-[1.5rem] font-semibold mq-1367:mt-2 mq-1100:text-[1.2rem] mq-900:text-[1.1rem] mq-786:text-[1.3rem] mq-600:text-[1.8rem] mq-425:text-[1.5rem]">
-                {title}
-              </h3>
-              <p className="mb-2 py-1 text-base tracking-[0.5px] mq-1367:text-[0.9rem] mq-1100:text-[0.8rem] mq-900:text-[0.7rem] mq-786:text-[0.75rem] mq-600:text-base mq-425:text-[0.85rem]">
-                {blurb}
-              </p>
-              <a
-                target="blank"
-                href={url}
-                className="bg-accent px-2 py-1 text-canvas transition-colors hover:bg-accent-hover mq-1367:mb-4 mq-1367:text-[0.8rem] mq-900:text-[0.7rem] mq-600:text-[0.9rem] mq-425:text-[0.85rem]"
-              >
-                View Demo
-              </a>
-            </aside>
+  // Wrap, never disable: `Previous model` on the first slide goes to the
+  // last, `Next model` on the last goes to the first. Both triggers are
+  // mandated on every slide, so a disabled end state would leave a dead
+  // control — wrapping keeps them live everywhere.
+  const goTo = (index: number) => {
+    setActiveIndex(((index % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      goTo(activeIndex - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      goTo(activeIndex + 1);
+    }
+  };
+
+  // Touch/trackpad swipe: a horizontal drag past the threshold advances one
+  // slide in the drag direction. No drag-follow animation, no library.
+  // Pointer capture keeps the up/cancel events routed here even if the
+  // gesture ends outside the carousel; a real touch drag is rarely exactly
+  // horizontal, so we only commit once the horizontal delta dominates the
+  // vertical one (the container's `touch-pan-y` also leaves vertical page
+  // scroll to the browser instead of fighting it).
+  const resetPointerStart = () => {
+    pointerStartX.current = null;
+    pointerStartY.current = null;
+  };
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    pointerStartX.current = event.clientX;
+    pointerStartY.current = event.clientY;
+  };
+
+  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    const startX = pointerStartX.current;
+    const startY = pointerStartY.current;
+    resetPointerStart();
+    if (startX === null || startY === null) return;
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+    if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    if (deltaX > SWIPE_THRESHOLD) goTo(activeIndex - 1);
+    else if (deltaX < -SWIPE_THRESHOLD) goTo(activeIndex + 1);
+  };
+
+  return (
+    <SectionShell id="work" index="01" label="SELECTED WORK">
+      <div
+        className="flex flex-col gap-4"
+        tabIndex={0}
+        role="group"
+        aria-roledescription="carousel"
+        aria-label="Selected work, by resume entry"
+        onKeyDown={handleKeyDown}
+      >
+        <div
+          className="overflow-hidden touch-pan-y"
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={resetPointerStart}
+        >
+          <div
+            className="flex transition-transform duration-500
+                       ease-[cubic-bezier(.22,.61,.36,1)] will-change-transform
+                       motion-reduce:transition-none"
+            style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}
+          >
+            {experience.map((entry, index) => {
+              const isActive = index === activeIndex;
+              // `cluster` is the resume subheading; the Cleveratti entry has
+              // none, so fall back to `role` — data-driven, no special case.
+              const headline = entry.cluster || entry.role;
+
+              return (
+                <div
+                  key={entry.id}
+                  className="w-full shrink-0 px-0.5"
+                  aria-hidden={!isActive}
+                >
+                  <Window
+                    title={entry.company}
+                    meta={`${pad(index + 1)} / ${pad(SLIDE_COUNT)}`}
+                  >
+                    <div className="flex flex-col gap-3">
+                      <p
+                        className="text-display-xs uppercase tracking-widest
+                                   text-phosphor-bright text-glow
+                                   mq-600:text-lg"
+                      >
+                        {headline}
+                      </p>
+                      <p className="text-2xs uppercase tracking-widest text-cyan">
+                        {entry.role} &middot; {entry.period}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2">
+                        {entry.stack.map((tech) => (
+                          <span key={tech} className={chipClass}>
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      <ul className="flex flex-col gap-2 text-sm text-phosphor">
+                        {entry.bullets.map((bullet, bulletIndex) => (
+                          <li key={bulletIndex} className="flex gap-2">
+                            <span className="text-cyan" aria-hidden="true">
+                              ›
+                            </span>
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Window>
+                </div>
+              );
+            })}
           </div>
-        ))}
-      </article>
-    </section>
-  </Block>
-);
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <button
+            type="button"
+            className={triggerClass}
+            onClick={() => goTo(activeIndex - 1)}
+          >
+            Previous model
+          </button>
+          <button
+            type="button"
+            className={triggerClass}
+            onClick={() => goTo(activeIndex + 1)}
+          >
+            Next model
+          </button>
+        </div>
+
+        <div className="flex items-center justify-center gap-2">
+          {experience.map((entry, index) => (
+            <button
+              key={entry.id}
+              type="button"
+              aria-label={`Go to model ${index + 1}`}
+              aria-current={index === activeIndex ? "true" : undefined}
+              onClick={() => goTo(index)}
+              className="group p-1"
+            >
+              {/* Visual dot stays 8px; the button's padding is the 24px
+                  WCAG 2.2 hit area. */}
+              <span
+                className={`block h-1 w-1 rounded-full transition-colors ${
+                  index === activeIndex
+                    ? "bg-cyan"
+                    : "bg-line group-hover:bg-line-bright"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    </SectionShell>
+  );
+};
 
 export default Work;

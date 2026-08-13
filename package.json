@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "firebase": "^9.20.0",
-    "framer-motion": "^10.12.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
