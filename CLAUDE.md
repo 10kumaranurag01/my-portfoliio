@@ -17,24 +17,41 @@ Deploys via Vercel (`.vercel` is gitignored); no deploy config is committed.
 
 ## Architecture
 
-Single-page portfolio site. Plain JavaScript + JSX, no TypeScript, no router. `src/index.js` mounts `App`, which renders a fixed list of section components top to bottom. Navigation is anchor links (`#home`, `#services`, `#work`, `#contact`) against `id`s on the section wrappers — adding a "page" means adding a section component + an `id` + a nav link in `Header.jsx`.
+Single-page portfolio site. Plain JavaScript + JSX, no TypeScript, no router. `src/index.js` mounts `App`, which wraps everything in `UIThemeProvider` and renders a fixed list of section components top to bottom. Navigation is anchor links (`#home`, `#services`, `#work`, `#contact`) against `id`s on the section wrappers — adding a "page" means adding a section component + an `id` + an entry in the `navLinks` array in `Header.jsx`.
 
 **`src/componenets/` is misspelled on disk.** Every import depends on it. Don't rename it as a drive-by cleanup.
 
-### Styling — global SCSS, tag/ID selectors
+### Styling — Tailwind, tokens enforced by override
 
-All styling is one global stylesheet: `src/styles/app.scss` is imported once in `index.js` and `@import`s every partial. No CSS modules, no per-component imports.
+All styling is Tailwind utilities in JSX. `src/styles/app.css` is the only stylesheet, imported once in `index.js`; it holds the `@tailwind` directives, the `--ui-*` custom properties, and a small `@layer components` block. There are no SCSS files and no CSS modules.
 
-- `statics.scss` — all variables: colors (`$color1`…`$color6_2`), fonts (`$text1`, `$text2`), vmax-based spacing scale (`$p`, `$p_md`, `$p_base`, `$p_sm`…). Use these rather than literals.
-- One partial per section (`home.scss`, `work.scss`, …) matching the component.
-- `mediaquery.scss` — **all** responsive overrides for **all** sections live here, not next to the base rules. A layout change usually needs an edit in the section partial *and* in `mediaquery.scss`, or the change silently disappears below 1367px.
-- `animations.scss` — shared CSS keyframes.
+**Tailwind is wired through CRA's built-in support, which is gated on the literal existence of `tailwind.config.js` in the project root** (`node_modules/react-scripts/config/webpack.config.js:72`). If that file is renamed (`.cjs`, `.mjs`, `.ts`) or moved, react-scripts silently swaps Tailwind out of its PostCSS chain: the build still succeeds, but `@tailwind`/`@apply` ship to the browser unprocessed and every utility class dies. Symptom is a ~3 kB `main.*.css` instead of ~22 kB. CRACO is deliberately *not* used — it was tried and its `style.postcss` override did not reach the loader on react-scripts 5.
 
-Selectors are element- and ID-based (`#home > section:first-of-type`, `aside`, `article`, `> img`) with very few class names. Reordering or wrapping markup inside a section breaks its styles even when the JSX looks fine.
+`tailwind.config.js` overrides (not extends) three scales, so the system is enforced rather than merely offered:
 
-### Animations
+- **`spacing`** — 8px metric only: `1` = 8px, `2` = 16px, … plus a `0.5` = 4px half-step and the viewport page gutters (`page`, `page-md`, `page-base`, `page-sm`). Off-grid values must be written as arbitrary values (`p-[13px]`), which makes them visible in review. Ported values from the old SCSS were snapped to the nearest multiple of 8, so a few sizes moved by a pixel or two (nav height 100px → 96px, footer avatar 100px → 96px).
+- **`colors`** — project palette only, so a stray `bg-blue-500` generates no CSS instead of shipping an off-palette colour. Primary accent is `accent` = `#ff79c6` (this replaced the previous orange `#f26440` everywhere).
+- **`screens`** — the site's breakpoints are all max-width and named `mq-1367`, `mq-1100`, `mq-900`, `mq-786`, `mq-600`, `mq-425`, listed widest first so narrower queries win. There are no `sm:`/`md:`/`lg:` variants; `mq-900:gap-2` means "at 900px and below".
 
-Framer Motion, used per-component: each component declares a local `animations` object literal and spreads it into `motion.*` elements (`<motion.form {...animations.form}>`). Follow that pattern instead of introducing shared variants.
+Font sizes larger than Tailwind's defaults are `text-display`, `text-display-sm`, `text-display-xs`. The old keyframes are `animate-chevron`, `animate-float`, `animate-float-lg`.
+
+### Layout modes
+
+`src/componenets/UITheme.jsx` holds the whole mechanic in one file:
+
+- `UIThemeProvider` — owns the mode (`"design"` | `"dev"`), persists it to `localStorage` under `ui-layout-mode`, and writes it to `<html data-ui="...">`. Also renders the neon pointer and updates its `--nx`/`--ny` from `pointermove` directly on the DOM node, so pointer movement never re-renders React.
+- `useUITheme()` — `{ mode, setMode, toggleMode }`.
+- `LayoutToggle` — the switch, mounted in both `Header` and `Headerphone`.
+- `Block` — section shell. Replaces the section's root `<div id=...>` rather than wrapping it, so it adds no DOM depth. Renders the per-mode chrome and the code-style label.
+
+Because the mode lives on `<html>`, **mode-dependent styling is CSS, not conditional JSX**. Two ways to hook it:
+
+- `design:` / `dev:` Tailwind variants (registered as a plugin in `tailwind.config.js`) — e.g. `dev:bg-[var(--ui-panel)]`.
+- the `--ui-*` custom properties in `app.css`, which are redefined under `[data-ui="dev"]`. Anything that should invert between modes (page background, body text) reads `var(--ui-bg)` / `var(--ui-fg)` instead of a palette token. Surfaces that stay dark in both modes (`bg-slate` on Services and the Contact aside, `bg-ink` on the footer) use palette tokens directly.
+
+Design mode draws its 8px canvas grid on `body::before`, keyed to `--ui-step` so the grid *is* the spacing metric. The neon pointer only takes over `cursor` behind `@media (pointer: fine) and (prefers-reduced-motion: no-preference)`.
+
+Not built yet: the raw-source snippet overlays for dev mode. The syntax-token classes (`.tok-tag`, `.tok-attr`, `.tok-str`, `.tok-punct`) exist and are currently only used by the `Block` label.
 
 ### Firebase
 
@@ -42,14 +59,13 @@ Framer Motion, used per-component: each component declares a local `animations` 
 
 ### Content locations
 
-Content is hardcoded in JSX, not data-driven:
+Content is hardcoded in JSX, not fetched:
 
-- **Projects** live as repeated `.workItem` blocks inside `Work.jsx`. Add a project by copying a block there.
-- `src/assets/data.json` (`projects[]`) is consumed only by `Timeline.jsx` — and `Timeline` is not rendered by `App.js`. Editing `data.json` changes nothing visible.
-- **Resume** is `src/assets/Kumar_Anurag.pdf`, linked in three places via `require(...)` (`Home.jsx` ×2, `Services.jsx`). Replacing the resume means replacing that file; all three links follow.
+- **Projects** — the `projects` array at the top of `Work.jsx` (`{title, img, url, blurb}`). Add a project by adding an entry; the card chrome is written once.
+- **Tech icons** — the `technologies` and `tools` arrays in `Services.jsx`, built from ~24 individual asset imports, some with spaces or commas in the filename.
+- **Resume** — `src/assets/Kumar_Anurag.pdf`, imported as a module in `Home.jsx` and `Services.jsx`. Replacing the file is enough; all three links follow.
 - Local images are ES-module imports from `src/assets`; several project screenshots in `Work.jsx` and the avatar in `Footer.jsx` are hardcoded remote URLs (ibb.co, pixabay, githubusercontent) that can rot.
-- Tech-stack icons are ~25 individual imports at the top of `Services.jsx`, some with spaces/commas in the filename.
 
-### Known dead code
+### Dead code
 
-`App.js` imports `Timeline` and `Testimonial` but renders neither, and passes a `ratio` prop to `Home`, which ignores it (`Home` takes no props). The `ratio` state + resize listener in `App.js` and its `console.log` are therefore inert. Safe to remove if touching `App.js`; don't assume they feed anything.
+`Timeline.jsx` and `Testimonial.jsx` are not rendered by `App.js` and were not migrated — they still carry class names from the deleted SCSS, so they would render unstyled. `src/assets/data.json` was only ever read by `Timeline.jsx`, so nothing reads it now. Delete all three together, or migrate them, but don't assume they feed the live page.
