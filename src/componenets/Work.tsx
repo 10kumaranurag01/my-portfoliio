@@ -14,7 +14,6 @@ const pad = (value: number) => String(value).padStart(2, "0");
 
 const Work = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [expanded, setExpanded] = useState(false);
   const pointerStartX = useRef<number | null>(null);
   const pointerStartY = useRef<number | null>(null);
 
@@ -24,7 +23,6 @@ const Work = () => {
   // control — wrapping keeps them live everywhere.
   const goTo = (index: number) => {
     setActiveIndex(((index % SLIDE_COUNT) + SLIDE_COUNT) % SLIDE_COUNT);
-    setExpanded(false);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -92,14 +90,6 @@ const Work = () => {
               // `cluster` is the resume subheading; the Cleveratti entry has
               // none, so fall back to `role` — data-driven, no special case.
               const headline = entry.cluster || entry.role;
-              // Gate on `isActive` too: the track renders all five slides at
-              // once (only one is visually shown), so an ungated `expanded`
-              // would expand every off-screen slide's content and inflate
-              // the shared-height flex row underneath the active one.
-              const isExpanded = expanded && isActive;
-              const visibleBullets = isExpanded
-                ? entry.bullets
-                : entry.bullets.slice(0, 2);
 
               return (
                 <div
@@ -123,18 +113,16 @@ const Work = () => {
                         {entry.role} &middot; {entry.period}
                       </p>
 
-                      {isExpanded && (
-                        <div className="flex flex-wrap gap-2">
-                          {entry.stack.map((tech) => (
-                            <span key={tech} className={chipClass}>
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {entry.stack.map((tech) => (
+                          <span key={tech} className={chipClass}>
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
 
                       <ul className="flex flex-col gap-2 text-sm text-phosphor">
-                        {visibleBullets.map((bullet, bulletIndex) => (
+                        {entry.bullets.map((bullet, bulletIndex) => (
                           <li key={bulletIndex} className="flex gap-2">
                             <span className="text-cyan" aria-hidden="true">
                               &gt;
@@ -158,14 +146,6 @@ const Work = () => {
             onClick={() => goTo(activeIndex - 1)}
           >
             Previous model
-          </button>
-          <button
-            type="button"
-            className={triggerClass}
-            aria-expanded={expanded}
-            onClick={() => setExpanded((value) => !value)}
-          >
-            Inspect Weights
           </button>
           <button
             type="button"
