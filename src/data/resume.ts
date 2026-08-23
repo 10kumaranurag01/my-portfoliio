@@ -4,12 +4,16 @@
 
 export type ContactProtocol = {
   protocol: string; // "mailto" | "tel" | "geo" | "linkedin" | "github" | "https"
+  // What a non-engineer reads in the table's first column. `protocol` stays the
+  // machine key (isExternalProtocol, the Footer lookup, React keys); a recruiter
+  // should not have to know that "geo" means an address and "https" a website.
+  label: string;
   value: string; // the address text
   href: string | null; // null for geo
 };
 
 export type ExperienceCluster = {
-  id: string; // slug, stable, used as carousel key
+  id: string; // slug, stable; React key for the stacked cards
   company: string;
   role: string;
   period: string;
@@ -29,43 +33,57 @@ export type Credential = {
 
 export const profile = {
   name: "KUMAR ANURAG SAHU",
-  title: "Software Engineer — GenAI / Agentic AI",
+  title: "Software Engineer, GenAI / Agentic AI",
   location: "Bhubaneshwar, India",
 };
 
+// A trim of the resume's summary paragraph, not a rewrite: every clause below
+// appears in resume-source.tex. Two things were cut. The 25-technology comma
+// chain, because every keyword in it is already in skillGroups. And the opening
+// "Software Engineer specializing in Generative AI, LLM applications, and
+// Agentic AI systems", because the hero prints profile.title directly above
+// this paragraph — a recruiter's first three fixations were spending
+// themselves on one fact. What is left is the part the label does not say:
+// domain, and what was actually built.
 export const summary =
-  "Software Engineer specializing in Generative AI, LLM applications, and Agentic AI systems, with hands-on experience building production AI for enterprise freight and logistics workflows. Experienced in Mistral LLM integration, Retrieval-Augmented Generation (RAG), embeddings, vector search, semantic search, reranking, prompt engineering, structured function calling, tool calling, custom agent architectures, human-in-the-loop workflows, AI guardrails, and evaluation harnesses, backed by strong full-stack engineering in TypeScript, Node.js, React, MongoDB, REST APIs, event-driven systems, and AWS.";
+  "Hands-on experience building production AI for enterprise freight and logistics workflows: Mistral LLM integration, Retrieval-Augmented Generation (RAG), custom agent architectures, human-in-the-loop workflows, AI guardrails, and evaluation harnesses.";
 
 export const protocols: readonly ContactProtocol[] = Object.freeze([
   {
     protocol: "mailto",
+    label: "EMAIL",
     value: "kumarkas1515@gmail.com",
     href: "mailto:kumarkas1515@gmail.com",
   },
   {
     protocol: "tel",
+    label: "PHONE",
     value: "+91 9078943749",
     href: "tel:+919078943749",
   },
   {
     protocol: "geo",
+    label: "LOCATION",
     value: "Bhubaneshwar, India",
     href: null,
   },
   {
     protocol: "linkedin",
+    label: "LINKEDIN",
     value: "linkedin.com/in/kumar-anurag-858948207",
     href: "https://www.linkedin.com/in/kumar-anurag-858948207/",
   },
   {
     protocol: "github",
+    label: "GITHUB",
     value: "github.com/10kumaranurag01",
     href: "https://github.com/10kumaranurag01/",
   },
   {
     protocol: "https",
-    value: "myportfolio.anuragg.top",
-    href: "https://myportfolio.anuragg.top",
+    label: "SITE",
+    value: "myportfolio.anuragsahu.site",
+    href: "https://myportfolio.anuragsahu.site",
   },
 ]);
 
@@ -168,8 +186,8 @@ export const experience: readonly ExperienceCluster[] = Object.freeze([
   {
     id: "genai-agentic",
     company: "REUDAN INTERNATIONAL",
-    role: "Software Engineer — GenAI / Agentic AI",
-    period: "November 2024 — Present",
+    role: "Software Engineer, GenAI / Agentic AI",
+    period: "November 2024 – Present",
     cluster: "Generative AI & Agentic AI",
     bullets: [
       "Designed and built Kandyr Copilot, a production AI agent platform embedded in a freight-operations application, enabling natural-language interaction with enterprise data, document workflows, artifact generation, and gated business actions.",
@@ -183,8 +201,8 @@ export const experience: readonly ExperienceCluster[] = Object.freeze([
   {
     id: "rag-vector-docai",
     company: "REUDAN INTERNATIONAL",
-    role: "Software Engineer — GenAI / Agentic AI",
-    period: "November 2024 — Present",
+    role: "Software Engineer, GenAI / Agentic AI",
+    period: "November 2024 – Present",
     cluster: "RAG, Vector Search & Document AI",
     bullets: [
       "Built an AI document-automation system using LlamaParse and Mistral to extract structured logistics and accounting data from PDFs, with multi-document extraction, file-type tagging, engineered prompt instructions, source-document preservation, and structured function-call schemas.",
@@ -202,8 +220,8 @@ export const experience: readonly ExperienceCluster[] = Object.freeze([
   {
     id: "guardrails-eval",
     company: "REUDAN INTERNATIONAL",
-    role: "Software Engineer — GenAI / Agentic AI",
-    period: "November 2024 — Present",
+    role: "Software Engineer, GenAI / Agentic AI",
+    period: "November 2024 – Present",
     cluster: "AI Guardrails, Safety & Evaluation",
     bullets: [
       "Designed an AI-assisted purchase-invoice auto-conversion workflow with confidence thresholds, bank-account validation, duplicate detection, rate/quantity validation, provenance tracking, and human approval, plus a feedback loop converting validated corrections into vendor and charge aliases for future matching.",
@@ -215,8 +233,8 @@ export const experience: readonly ExperienceCluster[] = Object.freeze([
   {
     id: "fullstack-eventdriven",
     company: "REUDAN INTERNATIONAL",
-    role: "Software Engineer — GenAI / Agentic AI",
-    period: "November 2024 — Present",
+    role: "Software Engineer, GenAI / Agentic AI",
+    period: "November 2024 – Present",
     cluster: "Full-Stack AI Product & Event-Driven Platform",
     bullets: [
       "Built the React-based Copilot interface with streaming conversations, tool-call and approval cards, entity drafts, attachments, and generated artifacts; implemented 19 Copilot API routes including 3 SSE endpoints, consumed via 14 RTK Query client endpoints.",
@@ -228,7 +246,7 @@ export const experience: readonly ExperienceCluster[] = Object.freeze([
     id: "cleveratti-mern",
     company: "CLEVERATTI SKILLS PVT LIMITED",
     role: "Junior Full Stack Developer Intern",
-    period: "May 2024 — August 2024",
+    period: "May 2024 – August 2024",
     cluster: "",
     bullets: [
       "Analyzed an existing live codebase and independently built a complete web application, frontend and backend, using the MERN stack.",
@@ -241,7 +259,7 @@ export const credentials: readonly Credential[] = Object.freeze([
   {
     title: "Bachelor of Technology (B.Tech), Computer Science",
     org: "SIET, Dhenkanal",
-    period: "2020 — 2024",
+    period: "2020 – 2024",
   },
   {
     title: "Full Stack Web Development Course",
@@ -252,3 +270,9 @@ export const credentials: readonly Credential[] = Object.freeze([
 ]);
 
 export { default as resumeFile } from "../assets/Kumar_Anurag.pdf";
+
+// resumeFile is a bundled asset, so its URL carries a content hash
+// (Kumar_Anurag-C3MKz8vz.pdf) and a bare `download` attribute would save the
+// hash as the recruiter's filename. The three download links pass this instead,
+// and keeping it next to resumeFile means they can't disagree.
+export const resumeFileName = "Kumar_Anurag.pdf";

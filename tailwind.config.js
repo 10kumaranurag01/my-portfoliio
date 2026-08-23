@@ -1,7 +1,7 @@
 /**
  * Single source of truth for the design tokens.
  *
- * Two deliberate overrides (not `extend`) so the system is enforced rather
+ * Three deliberate overrides (not `extend`) so the system is enforced rather
  * than merely available:
  *   - `spacing`  : 8px metric only. Every step is a multiple of 8 (plus a 4px
  *                  half-step and the vmax page gutters). Off-grid padding has
@@ -50,20 +50,25 @@ export default {
       page: "13.33vmax",
       "page-md": "7vmax",
       "page-base": "5vmax",
-      "page-sm": "1vmax",
+      // fixed, not vmax: in portrait vmax keys off HEIGHT, so "1vmax" resolved
+      // to 8.44px on a 390x844 phone — the gutter shrank as the screen
+      // narrowed, which is backwards. This is the narrowest-viewport gutter.
+      "page-sm": "16px",
     },
 
     colors: {
       transparent: "transparent",
       current: "currentColor",
-      white: "#ffffff",
-      black: "#000000",
 
       mute: "#8a8a96",
 
       // CRT design system (retro-ai-crt-overhaul), see
       // docs/superpowers/plans/retro-ai-crt-overhaul.md
-      void: "#000000",
+      //
+      // No pure #000 anywhere: neutrals are tinted toward the brand hue, so
+      // the page base carries a trace of phosphor green. The luminance shift
+      // off #000000 is negligible, so no contrast ratio below changes.
+      void: "#000402",
       carbon: {
         DEFAULT: "#0b0b0e",
         raised: "#141419",
@@ -80,8 +85,14 @@ export default {
       },
       amber: "#ffc857",
       line: {
-        DEFAULT: "#23232b",
-        bright: "#3a3a46",
+        // Decorative only: dividers, table rules, card borders.
+        DEFAULT: "#3a3a46",
+        bright: "#4d4d5c",
+        // Interactive boundaries: buttons, inputs, anything clickable.
+        // 4.03:1 on void and 3.77:1 on carbon, which clears WCAG 1.4.11's
+        // 3:1 bar for non-text UI components. The old #23232b was 1.35:1,
+        // so buttons did not read as buttons.
+        strong: "#6b6b7d",
       },
       // the mandated 6-stripe rainbow, in this order
       bar: {
@@ -124,7 +135,6 @@ export default {
         "2xs": ["0.6875rem", { lineHeight: "1.4" }],
       },
       boxShadow: {
-        glow: "0 0 8px #7dffb0, 0 0 24px #7dffb066",
         "glow-cyan": "0 0 8px #66e8ff, 0 0 24px #66e8ff66",
       },
       keyframes: {
@@ -136,20 +146,10 @@ export default {
           from: { transform: "translate3d(0, 0, 0)" },
           to: { transform: "translate3d(0, 64px, 0)" },
         },
-        caret: {
-          from: { opacity: "1" },
-          to: { opacity: "0" },
-        },
-        flicker: {
-          from: { opacity: "0.06" },
-          to: { opacity: "0.09" },
-        },
       },
       animation: {
         scan: "scan 7s linear infinite",
         drift: "drift 20s linear infinite",
-        caret: "caret 1s steps(2) infinite",
-        flicker: "flicker 4s ease-in-out infinite alternate",
       },
     },
   },

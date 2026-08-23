@@ -1,5 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+// Firestore *Lite*: this app makes exactly one write (Contact.tsx addDoc) and
+// never reads, listens, or persists offline. The full SDK ships the realtime
+// WebChannel transport and the offline cache for nothing; Lite is a REST client
+// with the same addDoc/collection API. Swapping saved ~222 kB of the JS bundle
+// on the firebase v12 bump. Restoring the full client means restoring that
+// cost, so only do it if a real listener or offline requirement appears.
+import { getFirestore } from "firebase/firestore/lite";
 
 const firebaseConfig = {
   apiKey: "AIzaSyD3vfFfPeZq1r2gZ4Dzsakz7jywT021Hek",

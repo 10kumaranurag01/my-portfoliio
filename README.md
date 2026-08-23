@@ -1,70 +1,41 @@
-# Getting Started with Create React App
+# my-portfoliio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Single-page portfolio for Kumar Anurag Sahu, built as a retro-CRT terminal:
+phosphor green on near-black, scanlines, JetBrains Mono only. No router, no
+test runner. `App` renders a fixed list of sections and navigation is anchor
+links against their `id`s.
 
-## Available Scripts
+Stack: React 18, Vite 7, TypeScript in `strict` mode, Tailwind (with the
+`colors`, `spacing` and `screens` scales overridden rather than extended, so an
+off-palette utility emits no CSS), Firestore for the contact form.
 
-In the project directory, you can run:
+## Commands
 
-### `npm start`
+```bash
+npm start          # dev server on http://localhost:3000 (alias of npm run dev)
+npm run build      # tsc --noEmit, then production build to /dist
+npm run preview    # serve the built /dist
+npm run typecheck  # tsc --noEmit on its own
+npm run lint       # eslint .
+npm run format     # prettier --write .
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+CI (`.github/workflows/ci.yml`) runs `lint`, `format:check` and `build` on
+Node 24.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Content
 
-### `npm test`
+`src/data/resume.ts` is the single source of every name, date, company,
+bullet, skill and contact address on the site. Edit content there, not in
+components. The resume PDF is `src/assets/Kumar_Anurag.pdf`, re-exported from
+the same module: replace the file and both download links follow.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`src/componenets/` is misspelled on disk and every import depends on it. Leave
+it alone.
 
-### `npm run build`
+## Deploy
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Vercel, on push. `vercel.json` pins `framework: vite` and
+`outputDirectory: dist` because the Vercel project predates the migration from
+Create React App and its dashboard settings still point at CRA's `build`
+directory; the file overrides them.

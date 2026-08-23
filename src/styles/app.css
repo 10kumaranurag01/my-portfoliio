@@ -11,7 +11,8 @@
     --crt-drift-duration: 20s;
     --crt-bezel-radius: 20px;
     --crt-bezel-radius-sm: 12px;
-    --crt-vignette-strength: 0.9;
+    /* A legibility budget, not a taste knob — see .crt-vignette below. */
+    --crt-vignette-strength: 0.22;
   }
 
   html {
@@ -106,16 +107,46 @@
     animation: drift var(--crt-drift-duration) linear infinite;
   }
 
+  /* The page base is already near-black, so this layer cannot darken the
+     background — it only darkens the FOREGROUND sitting under it. Every
+     point of strength is spent out of the contrast budget, which is why
+     these numbers are not a taste knob.
+
+     The mask attenuates the vertical axis only, and linearly: it is 0 at
+     y=0, 0.37 at the header's text baseline (y=52) and 1.0 from y=140 down.
+     The horizontal edges are NOT masked at all, so the binding constraint is
+     the left/right gutter, where `page-sm` puts text 16px in from the edge:
+     composite alpha there must stay under 0.166 for phosphor-dim/mute at
+     text-2xs (4.5:1) and under 0.144 for line-strong on carbon (1.4.11's
+     3:1). At strength 0.22 the box-shadow contributes 0.086 at d=16px and
+     the radial another ~0.055, so ~0.135 total: both clear. Raising the
+     strength or the blur radius spends that margin — check the gutter, not
+     the centre, before touching either. */
   .crt-vignette {
     position: fixed;
     inset: 0;
     z-index: 201;
     pointer-events: none;
-    box-shadow: inset 0 0 220px rgba(0, 0, 0, var(--crt-vignette-strength));
+    box-shadow: inset 0 0 120px rgba(0, 0, 0, var(--crt-vignette-strength));
     background: radial-gradient(
       ellipse at center,
       transparent 55%,
-      rgba(0, 0, 0, 0.55) 100%
+      rgba(0, 0, 0, 0.22) 100%
+    );
+    /* 140px = the 100px sticky header (spacing.nav) plus its margin. */
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 140px,
+      #000 calc(100% - 140px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 140px,
+      #000 calc(100% - 140px),
+      transparent 100%
     );
   }
 

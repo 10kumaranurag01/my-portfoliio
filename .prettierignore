@@ -4,3 +4,10 @@ package-lock.json
 
 # subagent-driven-development scratch workspace (git-ignored)
 .superpowers/
+
+# Vendored agent tooling installed into the repo by Claude Code plugins. Not
+# authored here and not formatted to this project's Prettier defaults, so it
+# would turn `npm run format:check` red in CI the moment anyone `git add .`s it.
+.github/agents/
+.github/hooks/
+.github/skills/
