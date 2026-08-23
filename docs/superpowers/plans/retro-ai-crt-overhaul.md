@@ -1,3 +1,51 @@
+> **SUPERSEDED. Do not follow this plan as written.**
+
+The design-critique change set on branch `impeccable-critique-fixes` (landed
+2026-08-23) reworked the palette, the shared primitives and three whole sections, so
+working through the tasks below would reintroduce accessibility defects that were
+deliberately fixed. Nothing here is corrected: the file is kept only as a record of
+what was true when it was written. For how the code actually works now, read
+`CLAUDE.md`; for the strategic intent and the locked visual identity, read
+`PRODUCT.md`. Verified against the current code, these claims are the actively
+dangerous ones:
+
+- **`void` is not `#000000`.** It is `#000402`; the palette bans pure black and tints
+  every neutral toward the brand hue (`tailwind.config.js`).
+- **The rest of the palette table has moved too.** `line` is `#3a3a46` and
+  `line.bright` `#4d4d5c`, plus a new `line.strong` `#6b6b7d` for interactive edges;
+  `mute` is `#8a8a96`. The table's `line` `#23232b` is 1.35:1 on `void` and fails WCAG
+  1.4.11, which is exactly why it was replaced.
+- **`Window` has no chrome dots.** The triad is gone (36 stateless dots across 12
+  instances), the title is `text-sm text-phosphor-bright` rather than `text-2xs
+text-phosphor-dim`, there is a `titleAs` prop (`"h2" | "h3" | "p"`) because the
+  plan's unconditional `<h3>` broke the outline order to H1, H3, H2 (WCAG 1.3.1), and
+  there is no `className` prop.
+- **The hero types nothing.** `typewriter-effect` is not a dependency, the `caret`
+  keyframe and `animate-caret` no longer exist, and PRODUCT.md names fake typing
+  animations as an anti-reference; the panel prints the current role's workstreams
+  statically. The `flicker` keyframe is gone as well: `tailwind.config.js` defines
+  only `scan` and `drift`.
+- **Task 6, the Selected Work carousel, was deleted whole.** `Work.tsx` holds no
+  state: no track transform, no `ArrowLeft`/`ArrowRight` handler, no dot buttons, no
+  pointer swipe, and none of the `Previous model` / `Inspect Weights` / `Next model`
+  triggers. It renders one `Window` per employment tenure with the resume clusters as
+  subheads inside it, and prints every bullet unconditionally; the plan's collapse to
+  two bullets behind a toggle is the defect that was removed. The carousel clauses in
+  Global Constraints 6 and 8 are moot.
+- **`--crt-vignette-strength` is `0.22`, not the `rgba(0, 0, 0, .9)` the plan writes
+  into `.crt-vignette`.** That value fails WCAG AA on foreground text. The current
+  one sits on a measured margin (composite alpha at the page gutter must stay under
+  0.166, and under 0.144 for `line.strong` on `carbon`); the comment above
+  `.crt-vignette` in `src/styles/app.css` shows the arithmetic. Do not raise the
+  strength or the blur radius without reading it.
+- **Section numbering and labels differ.** Work is `01`, Capabilities is `02` and is
+  labelled `STACK` (so it matches the nav), Contact is `03`; the heading renders as
+  `// NN LABEL` with a space, not the dashed form or the `02`/`03`/`04` indexes used
+  below.
+- **Capabilities is not a flat four-panel `columns-2` grid.** Cards are sized by group
+  weight, the two long groups disclose their tails through `<details>`, and the
+  `{index+1}/4` panel ordinal is gone.
+
 # Plan — Retro-AI CRT Portfolio Overhaul
 
 ## Spec (authority)

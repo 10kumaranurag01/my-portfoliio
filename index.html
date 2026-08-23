@@ -4,23 +4,105 @@
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#000402" />
+    <title>Kumar Anurag Sahu, Software Engineer (GenAI / Agentic AI)</title>
     <meta
       name="description"
-      content="Portfolio of Kumar Anurag Sahu, Software Engineer — GenAI / Agentic AI"
+      content="Portfolio of Kumar Anurag Sahu, a software engineer building production Generative AI, RAG, and agentic systems for enterprise freight and logistics workflows."
     />
-    <link rel="apple-touch-icon" href="/81381360.png" />
+    <link rel="apple-touch-icon" href="/icon-192.jpg" />
     <link rel="manifest" href="/manifest.json" />
+
+    <!--
+      Absolute base for the share tags: og:image and og:url must be absolute,
+      and index.html sits outside the React tree so it cannot import
+      src/data/resume.ts. This is the live deployment domain, confirmed by the
+      owner, so it is the one canonical has to name.
+
+      Known conflict, deliberately not papered over: resume.ts's `https`
+      protocol entry and the resume source in
+      docs/superpowers/plans/resume-source.tex both still print
+      myportfolio.anuragg.top, and so does the built PDF. If that domain is
+      retired, all three need the same edit and the PDF a rebuild. If it is a
+      live alias, canonical still belongs here, on the served domain.
+    -->
+    <link rel="canonical" href="https://myportfolio.anuragsahu.site/" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Kumar Anurag Sahu, Software Engineer (GenAI / Agentic AI)"
+    />
+    <meta
+      property="og:description"
+      content="Portfolio of Kumar Anurag Sahu, a software engineer building production Generative AI, RAG, and agentic systems for enterprise freight and logistics workflows."
+    />
+    <meta property="og:url" content="https://myportfolio.anuragsahu.site/" />
+    <meta
+      property="og:image"
+      content="https://myportfolio.anuragsahu.site/icon-512.jpg"
+    />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="Photo of Kumar Anurag Sahu" />
+    <!--
+      `summary`, not `summary_large_image`: the only share asset is the square
+      512x512 icon. A large-image card wants roughly 2:1 and centre-crops a
+      square to a letterbox strip, so the preview a forwarded link produces was
+      a sliver. Switch this back if a 1200x630 image ever lands in public/.
+    -->
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Kumar Anurag Sahu, Software Engineer (GenAI / Agentic AI)"
+    />
+    <meta
+      name="twitter:description"
+      content="Portfolio of Kumar Anurag Sahu, a software engineer building production Generative AI, RAG, and agentic systems for enterprise freight and logistics workflows."
+    />
+    <meta
+      name="twitter:image"
+      content="https://myportfolio.anuragsahu.site/icon-512.jpg"
+    />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      The stylesheet is preloaded as well as linked: it is the only path to the
+      one font family the site has, so it competes for priority with nothing.
+      Fetching it early shortens the CSS-then-woff2 chain that otherwise leaves
+      the first paint in the generic monospace fallback, whose metrics differ
+      from JetBrains Mono enough to reflow visibly.
+    -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <title>Kumar Anurag Sahu — Software Engineer, GenAI / Agentic AI</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--
+      Mirrored from src/data/resume.ts (`profile`, `protocols`); index.html sits
+      outside the React tree so it cannot import them. Keep the two in sync.
+      The resume PDF is bundled from src/assets under a hashed filename, so
+      there is no stable URL for it to link.
+    -->
+    <noscript>
+      Kumar Anurag Sahu, Software Engineer (GenAI / Agentic AI). This page needs
+      JavaScript to render. For the resume, email
+      <a href="mailto:kumarkas1515@gmail.com">kumarkas1515@gmail.com</a>. Also
+      at
+      <a href="https://www.linkedin.com/in/kumar-anurag-858948207/"
+        >linkedin.com/in/kumar-anurag-858948207</a
+      >
+      and
+      <a href="https://github.com/10kumaranurag01/"
+        >github.com/10kumaranurag01</a
+      >.
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

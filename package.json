@@ -17,12 +17,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "firebase": "^9.20.0",
+    "firebase": "^12.18.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
-    "react-icons": "^4.8.0",
-    "typewriter-effect": "^2.19.0"
+    "react-icons": "^4.8.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
